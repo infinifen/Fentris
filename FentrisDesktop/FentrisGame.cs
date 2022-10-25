@@ -1,15 +1,17 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using FentrisDesktop.Board;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace FentrisDesktop;
 
-public class Game1 : Game
+public class FentrisGame : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    public Game1()
+    public FentrisGame()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
