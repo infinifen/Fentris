@@ -28,24 +28,34 @@ public class Board
             {
                 return new Block(BlockKind.OutOfBounds);
             }
+
             return board[x, y];
         }
-        set { try {board[x, y] = value;} catch {} }
+        set
+        {
+            try
+            {
+                board[x, y] = value;
+            }
+            catch
+            {
+            }
+        }
     }
 
     public IEnumerable<Block> Row(int y)
     {
         for (int x = 0; x < board.GetLength(0); ++x)
         {
-            yield return board[x, y];
+            yield return this[x, y];
         }
     }
-    
+
     public IEnumerable<Block> Column(int x)
     {
         for (int y = 0; y < board.GetLength(1); ++y)
         {
-            yield return board[x, y];
+            yield return this[x, y];
         }
     }
 
@@ -53,7 +63,7 @@ public class Board
     {
         return Row(row).All(b => b.kind != BlockKind.Clear);
     }
-    
+
     public IEnumerable<int> FullRows() => Enumerable.Range(0, board.GetLength(1)).Where(IsRowFull);
 
 
@@ -71,7 +81,7 @@ public class Board
     }
 
     public bool CollidePiece(Piece p) => CollidePiece(p, p.X, p.Y);
-    
+
     public void PlacePiece(Piece p, int x, int y)
     {
         foreach (var (bx, by) in p.GetBlockOffsets())
@@ -84,8 +94,10 @@ public class Board
 
     public int GetGhostY(Piece p, int x, int y)
     {
-        while (!this.CollidePiece(p, x, y++)) {}
-        
+        while (!this.CollidePiece(p, x, y++))
+        {
+        }
+
         return y - 2;
     }
 
