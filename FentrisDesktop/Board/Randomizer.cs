@@ -1,9 +1,6 @@
 ﻿namespace FentrisDesktop.Board;
 
-public abstract class Randomizer
+public interface IRandomizer
 {
-    public PieceShape GenerateNext()
-    {
-        return Tetrominoes.I;
-    }
+    public PieceShape GenerateNext();
 }
