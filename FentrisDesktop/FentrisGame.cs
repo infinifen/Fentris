@@ -21,6 +21,10 @@ public class FentrisGame : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        
+        //replace this with nci timing stuff later
+        IsFixedTimeStep = true;  //Force the game to update at fixed time intervals
+        TargetElapsedTime = TimeSpan.FromSeconds(1 / 60.0f);  //Set the time interval to 1/30th of a second
 
         base.Initialize();
     }
