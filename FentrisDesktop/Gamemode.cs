@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 
 namespace FentrisDesktop.Board;
@@ -8,13 +9,16 @@ namespace FentrisDesktop.Board;
 public class Gamemode : GameScreen
 {
     private new FentrisGame Game => (FentrisGame)base.Game;
-    
+
     public Board Board;
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
-    public int Gravity = 0; // gravity ticks per frame
+    protected RenderTarget2D BoardRenderTarget;
+    public int Gravity => 0; // gravity ticks per frame
     public IRandomizer Randomizer;
+
+    public int frame = 0;
     // rotation system goes here later
 
     public Gamemode(FentrisGame game) : base(game)
@@ -23,6 +27,8 @@ public class Gamemode : GameScreen
         Board = new Board();
         Randomizer = new TestRandomizer();
         Next = new(Enumerable.Range(0, NextAmount).Select(_ => Randomizer.GenerateNext()));
+        BoardRenderTarget =
+            new RenderTarget2D(game.GraphicsDevice, 320, 1280, false, SurfaceFormat.Alpha8, DepthFormat.None);
     }
 
     public void CycleNext()
@@ -74,11 +80,33 @@ public class Gamemode : GameScreen
 
     public override void Update(GameTime gameTime)
     {
-        throw new System.NotImplementedException();
     }
 
     public override void Draw(GameTime gameTime)
     {
-        throw new System.NotImplementedException();
+        DrawBoard();
+    }
+
+    private void DrawBoard()
+    {
+        var (rx, ry) = (0, 0); // replace this with actual centering logic later
+        Game.GraphicsDevice.SetRenderTarget(BoardRenderTarget);
+        Game.GraphicsDevice.Clear(Color.Transparent);
+
+        // board render target is 320x1280, so a single mino is 32x32
+        for (int y = 0; y < Board.board.GetLength(1); y++)
+        {
+            for (int x = 0; x < Board.board.GetLength(0); y++)
+            {
+                var block = Board[x, y];
+                
+            }
+        }
+    }
+
+    public override void UnloadContent()
+    {
+        BoardRenderTarget.Dispose();
+        base.UnloadContent();
     }
 }
