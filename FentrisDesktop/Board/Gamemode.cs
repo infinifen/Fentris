@@ -1,22 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.Screens;
 
 namespace FentrisDesktop.Board;
 
-public class Gamemode
+public class Gamemode : GameScreen
 {
+    private new FentrisGame Game => (FentrisGame)base.Game;
+    
     public Board Board;
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
     public int Gravity = 0; // gravity ticks per frame
-    public Randomizer Randomizer;
+    public IRandomizer Randomizer;
     // rotation system goes here later
 
-    public Gamemode()
+    public Gamemode(FentrisGame game) : base(game)
     {
         NextAmount = 3; // to be specified by each subclass ig
         Board = new Board();
+        Randomizer = new TestRandomizer();
         Next = new(Enumerable.Range(0, NextAmount).Select(_ => Randomizer.GenerateNext()));
     }
 
@@ -57,18 +62,23 @@ public class Gamemode
 
     public void Rotate(int direction)
     {
-        var old_rotation = ActivePiece.Rotation;
+        var oldRotation = ActivePiece.Rotation;
         // rotation system stuff will go here later
         ActivePiece.Rotation += direction;
         if (!Board.CollidePiece(ActivePiece)) return; // successful natural rotation
         
         // natural rotation blocked, for now just fail the rotation
-        ActivePiece.Rotation = old_rotation;
+        ActivePiece.Rotation = oldRotation;
         return;
     }
 
-    public void Update()
+    public override void Update(GameTime gameTime)
     {
-        
+        throw new System.NotImplementedException();
+    }
+
+    public override void Draw(GameTime gameTime)
+    {
+        throw new System.NotImplementedException();
     }
 }
