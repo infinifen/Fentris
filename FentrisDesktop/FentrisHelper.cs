@@ -19,7 +19,8 @@ public static class FentrisHelper
             BlockKind.Orange => Microsoft.Xna.Framework.Color.Orange,
             BlockKind.Red => Microsoft.Xna.Framework.Color.Red,
             BlockKind.Yellow => Microsoft.Xna.Framework.Color.Yellow,
-            BlockKind.OutOfBounds => Microsoft.Xna.Framework.Color.Transparent
+            BlockKind.OutOfBounds => Microsoft.Xna.Framework.Color.Transparent,
+            _ => Microsoft.Xna.Framework.Color.Transparent
         };
     }
 }
