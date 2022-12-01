@@ -3,7 +3,7 @@ using FentrisDesktop.Board;
 using var game = new FentrisDesktop.FentrisGame();
 var b = new Board();
 b[4, 3] = new Block(BlockKind.Bone);
-var p = new Piece(Tetrominoes.I, 0, 0, 2);
+var p = new Piece(Tetrominoes.I, 0, 0, 2, BlockKind.Red);
 Console.WriteLine(b);
 Console.WriteLine(b.CollidePiece(p, 0, 0));
 Console.WriteLine(b.CollidePiece(p, 0, 2));

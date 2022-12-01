@@ -100,7 +100,7 @@ public class Board
     {
         foreach (var (bx, by) in p.GetBlockOffsets())
         {
-            this[x + bx, y + by] = new Block(BlockKind.Bone); // TODO: make this actually use some color scheme
+            this[x + bx, y + by] = new Block(p.Kind);
         }
     }
 

@@ -8,6 +8,8 @@ public class Piece
     int _rot;
     public int Rotation { get => _rot % 4; set => _rot = value; }
 
+    public BlockKind Kind { get; set; }
+    
     public int LockDelayCounter { get; set; }
     public int X { get; set; }
 
@@ -20,12 +22,13 @@ public class Piece
     public int SubY { get; set; }
 
 
-    public Piece(PieceShape shape, int rotation, int x, int y)
+    public Piece(PieceShape shape, int rotation, int x, int y, BlockKind blockKind = BlockKind.Bone)
     {
         Shape = shape;
         Rotation = rotation;
         X = x;
         Y = y;
+        Kind = blockKind;
     }
 
     public IEnumerable<(int, int)> GetBlockOffsets()
