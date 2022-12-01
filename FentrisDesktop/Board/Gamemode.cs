@@ -73,30 +73,30 @@ public class Gamemode
 
     public void Frame()
     {
-        // update logic goes here
+        TestPattern();
     }
 
     private void TestPattern()
     {
-        Board[0, 0] = new Block(BlockKind.Bone);
-        Board[1, 1] = new Block(BlockKind.Bone);
-        Board[2, 2] = new Block(BlockKind.Bone);
-        Board[3, 3] = new Block(BlockKind.Bone);
-        Board[4, 4] = new Block(BlockKind.Bone);
-        Board[5, 5] = new Block(BlockKind.Bone);
-        Board[6, 6] = new Block(BlockKind.Bone);
+        Board[0, 0] = new Block(BlockKind.Red);
+        Board[1, 1] = new Block(BlockKind.Orange);
+        Board[2, 2] = new Block(BlockKind.Yellow);
+        Board[3, 3] = new Block(BlockKind.Green);
+        Board[4, 4] = new Block(BlockKind.Cyan);
+        Board[5, 5] = new Block(BlockKind.Blue);
+        Board[6, 6] = new Block(BlockKind.Magenta);
         Board[7, 7] = new Block(BlockKind.Bone);
-        Board[8, 8] = new Block(BlockKind.Bone);
-        Board[9, 9] = new Block(BlockKind.Bone);
-        Board[8, 10] = new Block(BlockKind.Bone);
-        Board[7, 11] = new Block(BlockKind.Bone);
-        Board[6, 12] = new Block(BlockKind.Bone);
-        Board[5, 13] = new Block(BlockKind.Bone);
-        Board[4, 14] = new Block(BlockKind.Bone);
-        Board[3, 15] = new Block(BlockKind.Bone);
-        Board[2, 16] = new Block(BlockKind.Bone);
-        Board[1, 17] = new Block(BlockKind.Bone);
-        Board[0, 18] = new Block(BlockKind.Bone);
-        Board[1, 19] = new Block(BlockKind.Bone);
+        Board[8, 8] = new Block(BlockKind.Magenta);
+        Board[9, 9] = new Block(BlockKind.Blue);
+        Board[8, 10] = new Block(BlockKind.Cyan);
+        Board[7, 11] = new Block(BlockKind.Green);
+        Board[6, 12] = new Block(BlockKind.Yellow);
+        Board[5, 13] = new Block(BlockKind.Orange);
+        Board[4, 14] = new Block(BlockKind.Red);
+        Board[3, 15] = new Block(BlockKind.Garbage);
+        Board[2, 16] = new Block(BlockKind.Garbage);
+        Board[1, 17] = new Block(BlockKind.Garbage);
+        Board[0, 18] = new Block(BlockKind.Garbage);
+        Board[1, 19] = new Block(BlockKind.Garbage);
     }
 }
