@@ -6,15 +6,22 @@ public struct GamemodeInputs
     public bool RotateCw;
     public bool RotateCcw;
     public DirectionInput Direction;
+    public DirectionInput PreviousDirection;
     public bool SonicDrop;
     public bool SoftDrop;
     public bool IrsCw;
     public bool IrsCcw;
+
+    public override string ToString()
+    {
+        return
+            $"cw={RotateCw} ccw={RotateCcw}, dir={Direction}, pdir={PreviousDirection}, sonic={SonicDrop}, soft={SoftDrop}, icw={IrsCw}, iccw={IrsCcw}";
+    }
 }
 
 public enum DirectionInput
 {
-    Left, 
+    Left,
     Neutral,
     Right
 }

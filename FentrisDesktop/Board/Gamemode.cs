@@ -88,7 +88,7 @@ public class Gamemode
         return;
     }
 
-    public void Frame()
+    public void Frame(GamemodeInputs input)
     {
         TestPattern();
     }

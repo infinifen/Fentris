@@ -1,4 +1,5 @@
-﻿using FentrisDesktop.Board;
+﻿using System;
+using FentrisDesktop.Board;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -34,6 +35,7 @@ public class GamemodeRenderer : GameScreen
     public override void Update(GameTime gameTime)
     {
         var inputs = InputHandler.GetInputs();
+        Console.WriteLine(inputs);
         
         Mode.Frame(inputs);
         InputHandler.CycleInputStates();

@@ -5,9 +5,10 @@ namespace FentrisDesktop;
 
 public class InputHandler
 {
-    private KeyboardState PrevKeyboardState;
-    private GamePadState PrevGamePadState;
-    public DirectionInput CurrentDirection = DirectionInput.Neutral;
+    private KeyboardState _prevKeyboardState;
+    private GamePadState _prevGamePadState;
+    private DirectionInput _prevDirection = DirectionInput.Neutral;
+    private DirectionInput _currentDirection = DirectionInput.Neutral;
 
     public InputHandler()
     {
@@ -16,13 +17,14 @@ public class InputHandler
 
     public void CycleInputStates()
     {
-        PrevKeyboardState = Keyboard.GetState();
-        PrevGamePadState = GamePad.GetState(PlayerIndex.One);
+        _prevKeyboardState = Keyboard.GetState();
+        _prevGamePadState = GamePad.GetState(PlayerIndex.One);
+        _prevDirection = _currentDirection;
     }
 
     public bool KeyboardIsJustDown(Keys k)
     {
-        return Keyboard.GetState().IsKeyDown(k) && PrevKeyboardState.IsKeyUp(k);
+        return Keyboard.GetState().IsKeyDown(k) && _prevKeyboardState.IsKeyUp(k);
     }
 
     public bool KeyboardIsDown(Keys k)
@@ -32,17 +34,17 @@ public class InputHandler
     
     public bool KeyboardWasDown(Keys k)
     {
-        return PrevKeyboardState.IsKeyDown(k);
+        return _prevKeyboardState.IsKeyDown(k);
     }
 
     public bool KeyboardIsJustUp(Keys k)
     {
-        return Keyboard.GetState().IsKeyUp(k) && PrevKeyboardState.IsKeyDown(k);
+        return Keyboard.GetState().IsKeyUp(k) && _prevKeyboardState.IsKeyDown(k);
     }
 
     public bool KeyboardIsHeld(Keys k)
     {
-        return Keyboard.GetState().IsKeyDown(k) && PrevKeyboardState.IsKeyDown(k);
+        return Keyboard.GetState().IsKeyDown(k) && _prevKeyboardState.IsKeyDown(k);
     }
 
     public GamemodeInputs GetInputs()
@@ -53,35 +55,37 @@ public class InputHandler
 
         if (KeyboardIsJustDown(Keys.Left))
         {
-            CurrentDirection = DirectionInput.Left; // latest key overrides
+            _currentDirection = DirectionInput.Left; // latest key overrides
         }
 
         if (KeyboardIsJustDown(Keys.Right))
         {
-            CurrentDirection = DirectionInput.Right; // latest key overrides
+            _currentDirection = DirectionInput.Right; // latest key overrides
         }
 
         if (KeyboardIsDown(Keys.Left) && !KeyboardIsDown(Keys.Right))
         {
-            CurrentDirection = DirectionInput.Left; // both were held down and right was released
+            _currentDirection = DirectionInput.Left; // both were held down and right was released
         }
         
         if (KeyboardIsDown(Keys.Right) && !KeyboardIsDown(Keys.Left))
         {
-            CurrentDirection = DirectionInput.Right; // both were held down and left was released
+            _currentDirection = DirectionInput.Right; // both were held down and left was released
         }
 
         if (!(KeyboardIsDown(Keys.Left) || KeyboardIsDown(Keys.Right)))
         {
-            CurrentDirection = DirectionInput.Neutral; // neither is pressed, so go neutral
+            _currentDirection = DirectionInput.Neutral; // neither is pressed, so go neutral
         }
         
-        result.SonicDrop = KeyboardIsJustDown(Keys.Space);
-        result.SoftDrop = KeyboardIsJustDown(Keys.Down);
+        result.SonicDrop = KeyboardIsDown(Keys.Space);
+        result.SoftDrop = KeyboardIsDown(Keys.Down);
         result.RotateCw = KeyboardIsJustDown(Keys.Up) || KeyboardIsJustDown(Keys.X);
         result.RotateCcw = KeyboardIsJustDown(Keys.Z);
         result.IrsCw = KeyboardIsDown(Keys.Up) || KeyboardIsDown(Keys.X);
         result.IrsCcw = KeyboardIsDown(Keys.Z);
+        result.Direction = _currentDirection;
+        result.PreviousDirection = _prevDirection;
 
         return result;
     }
