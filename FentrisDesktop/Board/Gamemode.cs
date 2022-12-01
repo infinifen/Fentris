@@ -31,8 +31,19 @@ public class Gamemode
     
     public void CycleNext()
     {
-        ActivePiece = new Piece(Next.Dequeue(), 0, 3, 0);
+        var nextShape = Next.Dequeue();
+        ActivePiece = new Piece(nextShape, 0, 3, 0, GetPieceColor(nextShape));
         Next.Enqueue(Randomizer.GenerateNext());
+    }
+
+    protected BlockKind GetPieceColor(PieceShape shape)
+    {
+        if (shape.Equals(Tetrominoes.I))
+        {
+            return BlockKind.Red;
+        }
+
+        return BlockKind.Bone;
     }
 
     public bool ActivePieceTouchingStack()
