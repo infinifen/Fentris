@@ -10,6 +10,12 @@ public class Gamemode
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
     public int Gravity => 0; // gravity ticks per frame
+    public int Das => 6;
+    public int Arr => 1;
+
+    protected int DasCharge = 0;
+    protected int ArrCharge => 0;
+    
     public IRandomizer Randomizer;
 
     public int frame = 0;
