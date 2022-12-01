@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FentrisDesktop.Board;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 
-namespace FentrisDesktop.Board;
+namespace FentrisDesktop;
 
 public class GamemodeRenderer : GameScreen
 {
