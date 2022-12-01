@@ -1,6 +1,7 @@
 ﻿using FentrisDesktop.Board;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 
@@ -14,13 +15,15 @@ public class GamemodeRenderer : GameScreen
     protected SpriteBatch SpriteBatch;
     protected int BoardBorderThickness = 5;
     protected Gamemode Mode;
-    
+    protected InputHandler InputHandler;
+
     public GamemodeRenderer(FentrisGame game, Gamemode mode) : base(game)
     {
         Mode = mode;
         BoardRenderTarget =
             new RenderTarget2D(game.GraphicsDevice, 640 + BoardBorderThickness * 2, 1280 + BoardBorderThickness * 2,
                 false, SurfaceFormat.Alpha8, DepthFormat.None);
+        InputHandler = new InputHandler();
     }
 
     public override void LoadContent()
@@ -30,7 +33,10 @@ public class GamemodeRenderer : GameScreen
 
     public override void Update(GameTime gameTime)
     {
-        Mode.Frame();
+        var inputs = InputHandler.GetInputs();
+        
+        Mode.Frame(inputs);
+        InputHandler.CycleInputStates();
     }
 
     public override void Draw(GameTime gameTime)
