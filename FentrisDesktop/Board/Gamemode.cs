@@ -14,7 +14,7 @@ public class Gamemode
     public int Arr => 1;
 
     protected int DasCharge = 0;
-    protected int ArrCharge => 0;
+    protected int ArrCharge = 0;
     
     public IRandomizer Randomizer;
 
