@@ -16,6 +16,7 @@ public class GamemodeRenderer : GameScreen
     protected int BoardBorderThickness = 5;
     protected FentrisDesktop.Gamemode.Gamemode Mode;
     protected InputHandler InputHandler;
+    protected SpriteFont Font;
 
     public GamemodeRenderer(FentrisGame game, FentrisDesktop.Gamemode.Gamemode mode) : base(game)
     {
@@ -29,12 +30,12 @@ public class GamemodeRenderer : GameScreen
     public override void LoadContent()
     {
         SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
+        Font = Content.Load<SpriteFont>("default");
     }
 
     public override void Update(GameTime gameTime)
     {
         var inputs = InputHandler.GetInputs();
-        Console.WriteLine(inputs);
         
         Mode.Frame(inputs);
         InputHandler.CycleInputStates();
@@ -43,6 +44,20 @@ public class GamemodeRenderer : GameScreen
     public override void Draw(GameTime gameTime)
     {
         DrawBoard();
+        
+        SpriteBatch.Begin();
+        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge}" , Vector2.Zero, Color.White);
+        SpriteBatch.DrawString(Font, Mode.State.ToString(), new Vector2(0, 30), Color.White);
+        SpriteBatch.End();
+    }
+
+    protected void DrawActivePiece()
+    {
+        var p = Mode.ActivePiece;
+        foreach (var (bx, by) in p.GetBlockOffsets())
+        {
+            DrawBoardBlock(p.Kind, p.X + bx, p.Y + by);
+        }
     }
 
     private void DrawBoard()
@@ -58,7 +73,6 @@ public class GamemodeRenderer : GameScreen
         Game.GraphicsDevice.Clear(Color.Transparent);
 
         SpriteBatch.Begin();
-        // board render target minus border is 640x1280, so a single mino is 64x64
         for (int y = 0; y < Mode.Board.board.GetLength(1); y++)
         {
             for (int x = 0; x < Mode.Board.board.GetLength(0); x++)
@@ -66,15 +80,16 @@ public class GamemodeRenderer : GameScreen
                 var block = Mode.Board[x, y];
                 if (block.kind != BlockKind.Clear)
                 {
-                    SpriteBatch.FillRectangle(new Vector2(x * 64 + BoardBorderThickness, y * 64 + BoardBorderThickness),
-                        new Size2(64, 64),
-                        block.kind.Color());
+                    DrawBoardBlock(block.kind, x, y);
                 }
+
             }
         }
 
         SpriteBatch.DrawRectangle(0, 0, BoardRenderTarget.Width,
             BoardRenderTarget.Height, Color.White, BoardBorderThickness);
+        
+        DrawActivePiece();
 
         SpriteBatch.End();
         Game.GraphicsDevice.SetRenderTarget(null);
@@ -83,6 +98,14 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.Begin();
         SpriteBatch.Draw(BoardRenderTarget, new Rectangle(rx, ry, boardW, boardH), Color.White);
         SpriteBatch.End();
+    }
+
+    private void DrawBoardBlock(BlockKind kind, int x, int y)
+    {
+        // board render target minus border is 640x1280, so a single mino is 64x64
+        SpriteBatch.FillRectangle(new Vector2(x * 64 + BoardBorderThickness, y * 64 + BoardBorderThickness),
+                new Size2(64, 64),
+                kind.Color());
     }
 
     public override void UnloadContent()

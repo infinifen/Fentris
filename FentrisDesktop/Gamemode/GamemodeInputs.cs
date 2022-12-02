@@ -25,3 +25,16 @@ public enum DirectionInput
     Neutral,
     Right
 }
+
+public static class DirectionInputExt
+{
+    public static int ToInt(this DirectionInput di)
+    {
+        return di switch
+        {
+            DirectionInput.Left => -1,
+            DirectionInput.Neutral => 0,
+            DirectionInput.Right => 1
+        };
+    }
+}

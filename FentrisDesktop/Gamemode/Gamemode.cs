@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FentrisDesktop.Board;
 
@@ -11,16 +12,17 @@ public class Gamemode
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
     public int Gravity => 0; // gravity ticks per frame
-    public int Das => 6;
-    public int Arr => 1;
+    public int Das => 10;
+    public int Arr => 2;
     public int Are => 10;
     public int LineAre => 8;
     public int LineClearDelay => 20;
 
-    protected int DasCharge = 0;
-    protected int ArrCharge = 0;
-    
+    public int DasCharge = 0;
+    public int ArrCharge = 0;
+
     protected GamemodeState _state = GamemodeState.Placement;
+
     public GamemodeState State
     {
         get => _state;
@@ -77,6 +79,7 @@ public class Gamemode
 
     public bool HorizontalMove(int direction)
     {
+        Console.WriteLine($"hm {direction} {FrameCount}");
         if (Board.CollidePiece(ActivePiece, ActivePiece.X + direction, ActivePiece.Y))
         {
             return false;
@@ -114,7 +117,56 @@ public class Gamemode
 
     public void Frame(GamemodeInputs input)
     {
+        if (State == GamemodeState.LineClear && SinceLastStateChange >= LineClearDelay)
+        {
+            State = GamemodeState.LineAre;
+        }
+
+        if (State == GamemodeState.Are && SinceLastStateChange >= Are)
+        {
+            State = GamemodeState.Placement;
+        }
+
+        if (State == GamemodeState.LineAre && SinceLastStateChange >= LineAre)
+        {
+            State = GamemodeState.Placement;
+        }
+
+        ChargeDas(input);
+
+        switch (State)
+        {
+            case GamemodeState.Placement:
+                ArrCharge += DasCharge >= Das ? 1 : 0;
+
+                if (input.Direction != DirectionInput.Neutral && input.PreviousDirection == DirectionInput.Neutral ||
+                    ArrCharge >= Arr)
+                {
+                    // a movement button was just pressed or ARR went off
+                    HorizontalMove(input.Direction.ToInt());
+                    ArrCharge = 0;
+                }
+
+                break;
+        }
+
         FrameCount++;
+    }
+
+    private void ChargeDas(GamemodeInputs input)
+    {
+        if (input.Direction != DirectionInput.Neutral && input.Direction == input.PreviousDirection)
+        {
+            if (DasCharge < Das)
+            {
+                DasCharge++;
+            }
+        }
+        else
+        {
+            DasCharge = 0;
+            ArrCharge = 0;
+        }
     }
 
     private void TestPattern()
