@@ -12,6 +12,10 @@ public class Gamemode
     public int Gravity => 0; // gravity ticks per frame
     public int Das => 6;
     public int Arr => 1;
+    public int Are => 10;
+    public int LineAre => 8;
+
+    public int LineClearDelay => 20;
 
     protected int DasCharge = 0;
     protected int ArrCharge = 0;
