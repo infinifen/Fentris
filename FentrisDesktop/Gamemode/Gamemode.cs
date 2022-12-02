@@ -11,7 +11,7 @@ public class Gamemode
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
-    public int Gravity => 0; // gravity ticks per frame
+    public int Gravity => 16; // gravity ticks per frame
     public int Das => 10;
     public int Arr => 2;
     public int Are => 10;
@@ -91,15 +91,11 @@ public class Gamemode
 
     public void ApplyGravity(int gravity)
     {
-        var newY = (ActivePiece.SubY + gravity) / 256;
-        for (int row = ActivePiece.Y; row < newY; row++)
-        {
-            if (!Board.CollidePiece(ActivePiece, ActivePiece.X, row))
-                continue; // no collision after going down a row, magnificent
+        ActivePiece.SubY += gravity;
 
-            // the piece got shoved into the stack due to gravity, last good position was one above current
-            ActivePiece.Y = row - 1;
-            break;
+        while (Board.CollidePiece(ActivePiece))
+        {
+            ActivePiece.Y--;
         }
     }
 
@@ -137,20 +133,39 @@ public class Gamemode
         switch (State)
         {
             case GamemodeState.Placement:
-                ArrCharge += DasCharge >= Das ? 1 : 0;
-
-                if (input.Direction != DirectionInput.Neutral && input.PreviousDirection == DirectionInput.Neutral ||
-                    ArrCharge >= Arr)
-                {
-                    // a movement button was just pressed or ARR went off
-                    HorizontalMove(input.Direction.ToInt());
-                    ArrCharge = 0;
-                }
+                HandleRotation();
+                ApplyGravity(Gravity);
+                HandleMovement();
 
                 break;
         }
 
         FrameCount++;
+
+        void HandleRotation()
+        {
+            if (input.RotateCcw)
+            {
+                Rotate(-1);
+            }
+            if (input.RotateCw)
+            {
+                Rotate(1);
+            }
+        }
+
+        void HandleMovement()
+        {
+            ArrCharge += DasCharge >= Das ? 1 : 0;
+
+            if (input.Direction != DirectionInput.Neutral && input.PreviousDirection == DirectionInput.Neutral ||
+                ArrCharge >= Arr)
+            {
+                // a movement button was just pressed or ARR went off
+                HorizontalMove(input.Direction.ToInt());
+                ArrCharge = 0;
+            }
+        }
     }
 
     private void ChargeDas(GamemodeInputs input)
