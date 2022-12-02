@@ -1,4 +1,4 @@
-﻿namespace FentrisDesktop;
+﻿namespace FentrisDesktop.Gamemode;
 
 public struct GamemodeInputs
 {

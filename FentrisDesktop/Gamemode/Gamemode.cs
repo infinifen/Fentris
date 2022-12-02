@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FentrisDesktop.Board;
 
-namespace FentrisDesktop.Board;
+namespace FentrisDesktop.Gamemode;
 
 public class Gamemode
 {
-    public Board Board;
+    public Board.Board Board;
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
@@ -28,7 +29,7 @@ public class Gamemode
     public Gamemode()
     {
         NextAmount = 3; // to be specified by each subclass ig
-        Board = new Board();
+        Board = new Board.Board();
         Randomizer = new TestRandomizer();
         Next = new(Enumerable.Range(0, NextAmount).Select(_ => Randomizer.GenerateNext()));
     }

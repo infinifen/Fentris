@@ -1,5 +1,6 @@
 ﻿using System;
 using FentrisDesktop.Board;
+using FentrisDesktop.Gamemode;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -43,7 +44,7 @@ public class FentrisGame : Game
         Window.AllowUserResizing = true;
 
         base.Initialize();
-        _screenManager.LoadScreen(new GamemodeRenderer(this, new Gamemode()), new FadeTransition(GraphicsDevice, Color.Black));
+        _screenManager.LoadScreen(new GamemodeRenderer(this, new Gamemode.Gamemode()), new FadeTransition(GraphicsDevice, Color.Black));
     }
 
     protected override void LoadContent()

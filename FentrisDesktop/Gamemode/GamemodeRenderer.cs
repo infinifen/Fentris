@@ -2,11 +2,10 @@
 using FentrisDesktop.Board;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 
-namespace FentrisDesktop;
+namespace FentrisDesktop.Gamemode;
 
 public class GamemodeRenderer : GameScreen
 {
@@ -15,10 +14,10 @@ public class GamemodeRenderer : GameScreen
     protected RenderTarget2D BoardRenderTarget;
     protected SpriteBatch SpriteBatch;
     protected int BoardBorderThickness = 5;
-    protected Gamemode Mode;
+    protected FentrisDesktop.Gamemode.Gamemode Mode;
     protected InputHandler InputHandler;
 
-    public GamemodeRenderer(FentrisGame game, Gamemode mode) : base(game)
+    public GamemodeRenderer(FentrisGame game, FentrisDesktop.Gamemode.Gamemode mode) : base(game)
     {
         Mode = mode;
         BoardRenderTarget =

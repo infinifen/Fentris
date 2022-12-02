@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace FentrisDesktop;
+namespace FentrisDesktop.Gamemode;
 
 public class InputHandler
 {
