@@ -6,10 +6,20 @@ public class Piece
 {
     public PieceShape Shape;
     int _rot;
-    public int Rotation { get => _rot % 4; set => _rot = value; }
+
+    private static int Mod(int x, int m)
+    {
+        return (x % m + m) % m;
+    }
+
+    public int Rotation
+    {
+        get => Mod(_rot, 4);
+        set => _rot = value;
+    }
 
     public BlockKind Kind { get; set; }
-    
+
     public int LockDelayCounter { get; set; }
     public int X { get; set; }
 
@@ -35,6 +45,4 @@ public class Piece
     {
         return Shape.BlockOffsets[Rotation];
     }
-    
-    
 }
