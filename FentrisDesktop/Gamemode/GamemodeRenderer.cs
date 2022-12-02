@@ -10,7 +10,7 @@ namespace FentrisDesktop.Gamemode;
 public class GamemodeRenderer : GameScreen
 {
     private new FentrisGame Game => (FentrisGame)base.Game;
-    
+
     protected RenderTarget2D BoardRenderTarget;
     protected SpriteBatch SpriteBatch;
     protected int BoardBorderThickness = 5;
@@ -36,7 +36,7 @@ public class GamemodeRenderer : GameScreen
     public override void Update(GameTime gameTime)
     {
         var inputs = InputHandler.GetInputs();
-        
+
         Mode.Frame(inputs);
         InputHandler.CycleInputStates();
     }
@@ -44,9 +44,9 @@ public class GamemodeRenderer : GameScreen
     public override void Draw(GameTime gameTime)
     {
         DrawBoard();
-        
+
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge}" , Vector2.Zero, Color.White);
+        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge}", Vector2.Zero, Color.White);
         SpriteBatch.DrawString(Font, Mode.State.ToString(), new Vector2(0, 30), Color.White);
         SpriteBatch.End();
     }
@@ -73,7 +73,7 @@ public class GamemodeRenderer : GameScreen
         Game.GraphicsDevice.Clear(Color.Transparent);
 
         SpriteBatch.Begin();
-        for (int y = 0; y < Mode.Board.board.GetLength(1); y++)
+        for (int y = 1; y < Mode.Board.board.GetLength(1); y++) // start from 1 because of vanish row
         {
             for (int x = 0; x < Mode.Board.board.GetLength(0); x++)
             {
@@ -82,14 +82,13 @@ public class GamemodeRenderer : GameScreen
                 {
                     DrawBoardBlock(block.kind, x, y);
                 }
-
             }
         }
 
+        DrawActivePiece();
+        
         SpriteBatch.DrawRectangle(0, 0, BoardRenderTarget.Width,
             BoardRenderTarget.Height, Color.White, BoardBorderThickness);
-        
-        DrawActivePiece();
 
         SpriteBatch.End();
         Game.GraphicsDevice.SetRenderTarget(null);
@@ -103,9 +102,10 @@ public class GamemodeRenderer : GameScreen
     private void DrawBoardBlock(BlockKind kind, int x, int y)
     {
         // board render target minus border is 640x1280, so a single mino is 64x64
-        SpriteBatch.FillRectangle(new Vector2(x * 64 + BoardBorderThickness, y * 64 + BoardBorderThickness),
-                new Size2(64, 64),
-                kind.Color());
+        // y - 1 is there because of the vanish row, the first actual row that should be visible is row y=1
+        SpriteBatch.FillRectangle(new Vector2(x * 64 + BoardBorderThickness, (y - 1) * 64 + BoardBorderThickness),
+            new Size2(64, 64),
+            kind.Color());
     }
 
     public override void UnloadContent()
