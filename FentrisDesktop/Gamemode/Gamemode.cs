@@ -15,15 +15,28 @@ public class Gamemode
     public int Arr => 1;
     public int Are => 10;
     public int LineAre => 8;
-
     public int LineClearDelay => 20;
 
     protected int DasCharge = 0;
     protected int ArrCharge = 0;
     
+    protected GamemodeState _state = GamemodeState.Placement;
+    public GamemodeState State
+    {
+        get => _state;
+        set
+        {
+            _state = value;
+            LastStateChangeFrame = FrameCount;
+        }
+    }
+
+    protected int LastStateChangeFrame;
+    public int SinceLastStateChange => FrameCount - LastStateChangeFrame;
+
     public IRandomizer Randomizer;
 
-    public int frame = 0;
+    public int FrameCount;
     // rotation system goes here later
 
     public Gamemode()
@@ -32,8 +45,9 @@ public class Gamemode
         Board = new Board.Board();
         Randomizer = new TestRandomizer();
         Next = new(Enumerable.Range(0, NextAmount).Select(_ => Randomizer.GenerateNext()));
+        CycleNext();
     }
-    
+
     public void CycleNext()
     {
         var nextShape = Next.Dequeue();
@@ -46,6 +60,11 @@ public class Gamemode
         if (shape.Equals(Tetrominoes.I))
         {
             return BlockKind.Red;
+        }
+
+        if (shape.Equals(Tetrominoes.O))
+        {
+            return BlockKind.Yellow;
         }
 
         return BlockKind.Bone;
@@ -95,7 +114,7 @@ public class Gamemode
 
     public void Frame(GamemodeInputs input)
     {
-        TestPattern();
+        FrameCount++;
     }
 
     private void TestPattern()
