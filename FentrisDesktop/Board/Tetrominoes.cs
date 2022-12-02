@@ -11,5 +11,13 @@ public class Tetrominoes
         new [] {(2, 0), (2, 1), (2, 2), (2, 3)}
     });
 
-    public static readonly PieceShape[] All = {I};
+    public static readonly PieceShape O = new(new[]
+    {
+        new[] { (1, 1), (1, 2), (2, 1), (2, 2) },
+        new[] { (1, 1), (1, 2), (2, 1), (2, 2) },
+        new[] { (1, 1), (1, 2), (2, 1), (2, 2) },
+        new[] { (1, 1), (1, 2), (2, 1), (2, 2) }
+    });
+
+    public static readonly PieceShape[] All = {I, O};
 }
