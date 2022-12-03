@@ -11,12 +11,13 @@ public class Gamemode
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
-    public int Gravity => 16; // gravity ticks per frame
+    public int Gravity => 8; // gravity ticks per frame
     public int Das => 10;
     public int Arr => 2;
     public int Are => 10;
     public int LineAre => 8;
     public int LineClearDelay => 20;
+    public int LockDelay => 30;
 
     public int DasCharge = 0;
     public int ArrCharge = 0;
@@ -91,11 +92,23 @@ public class Gamemode
 
     public void ApplyGravity(int gravity)
     {
-        ActivePiece.SubY += gravity;
+        var newSubY = ActivePiece.SubY + gravity;
 
-        while (Board.CollidePiece(ActivePiece))
+        while (ActivePiece.SubY < newSubY)
         {
-            ActivePiece.Y--;
+            if (!Board.CollidePiece(ActivePiece, ActivePiece.X, ActivePiece.Y + 1))
+            {
+                ActivePiece.SubY += 256;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (ActivePiece.SubY > newSubY)
+        {
+            ActivePiece.SubY = newSubY;
         }
     }
 
@@ -134,7 +147,7 @@ public class Gamemode
         {
             case GamemodeState.Placement:
                 HandleRotation();
-                ApplyGravity(Gravity);
+                ApplyGravity(Gravity + (input.SoftDrop ? 256 : 0) + (input.SonicDrop ? 9999 : 0));
                 HandleMovement();
 
                 break;
@@ -166,6 +179,12 @@ public class Gamemode
                 ArrCharge = 0;
             }
         }
+    }
+
+    protected void PlacePiece()
+    {
+        Board.PlacePiece(ActivePiece);
+        CycleNext();
     }
 
     private void ChargeDas(GamemodeInputs input)
