@@ -46,7 +46,7 @@ public class GamemodeRenderer : GameScreen
         DrawBoard();
 
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY}", Vector2.Zero, Color.White);
+        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY} {Mode.LockDelayLeft}", Vector2.Zero, Color.White);
         SpriteBatch.DrawString(Font, Mode.State.ToString(), new Vector2(0, 30), Color.White);
         SpriteBatch.DrawString(Font, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
         SpriteBatch.End();

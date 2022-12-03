@@ -11,13 +11,15 @@ public class Gamemode
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
-    public int Gravity => 0; // gravity ticks per frame
+    public int Gravity => 48; // gravity ticks per frame
     public int Das => 10;
     public int Arr => 2;
     public int Are => 10;
     public int LineAre => 8;
     public int LineClearDelay => 20;
     public int LockDelay => 30;
+    public int LockDelayLeft;
+    public int HighestYSeen;
 
     public int DasCharge = 0;
     public int ArrCharge = 0;
@@ -55,6 +57,8 @@ public class Gamemode
     {
         var nextShape = Next.Dequeue();
         ActivePiece = new Piece(nextShape, 0, 3, 0, GetPieceColor(nextShape));
+        LockDelayLeft = LockDelay;
+        HighestYSeen = -8;
         Next.Enqueue(Randomizer.GenerateNext());
     }
 
@@ -128,6 +132,7 @@ public class Gamemode
     {
         if (State == GamemodeState.LineClear && SinceLastStateChange >= LineClearDelay)
         {
+            OnLineClearEnd();
             State = GamemodeState.LineAre;
         }
 
@@ -154,9 +159,21 @@ public class Gamemode
                 ApplyGravity(Gravity + (input.SoftDrop ? 256 : 0) + (input.SonicDrop ? 9999 : 0));
                 HandleMovement();
 
-                if (ActivePieceTouchingStack() && input.SoftDrop)
+                if (ActivePiece.Y > HighestYSeen)
                 {
-                    LockPiece();
+                    // step reset
+                    HighestYSeen = ActivePiece.Y;
+                    LockDelayLeft = LockDelay;
+                }
+
+                if (ActivePieceTouchingStack())
+                {
+                    LockDelayLeft--;
+
+                    if (input.SoftDrop || LockDelayLeft == 0)
+                    {
+                        LockPiece();
+                    }
                 }
 
                 break;
@@ -180,13 +197,21 @@ public class Gamemode
         {
             ArrCharge += DasCharge >= Das ? 1 : 0;
 
-            if (input.Direction != DirectionInput.Neutral && input.PreviousDirection == DirectionInput.Neutral ||
+            if (input.Direction != DirectionInput.Neutral && input.PreviousDirection != input.Direction ||
                 ArrCharge >= Arr)
             {
                 // a movement button was just pressed or ARR went off
                 HorizontalMove(input.Direction.ToInt());
                 ArrCharge = 0;
             }
+        }
+    }
+
+    public void OnLineClearEnd()
+    {
+        foreach (var row in Board.FullRows())
+        {
+            Board.ClearRow(row);
         }
     }
 
