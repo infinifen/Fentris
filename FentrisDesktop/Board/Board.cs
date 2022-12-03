@@ -61,7 +61,7 @@ public class Board
 
     public bool IsRowFull(int row)
     {
-        return Row(row).All(b => b.kind != BlockKind.Clear);
+        return Row(row).All(b => b.Kind != BlockKind.Clear);
     }
 
     public IEnumerable<int> FullRows() => Enumerable.Range(0, board.GetLength(1)).Where(IsRowFull);
@@ -73,7 +73,7 @@ public class Board
             for (int col = 0; col < board.GetLength(0); col++)
             {
                 this[col, row] = this[col, row - 1];
-                if (this[col, row].kind == BlockKind.OutOfBounds) // row 0 will try to get from -1
+                if (this[col, row].Kind == BlockKind.OutOfBounds) // row 0 will try to get from -1
                 {
                     this[col, row] = new Block();
                 }
@@ -85,7 +85,7 @@ public class Board
     {
         foreach (var (bx, by) in p.GetBlockOffsets())
         {
-            if (this[x + bx, y + by].kind != BlockKind.Clear)
+            if (this[x + bx, y + by].Kind != BlockKind.Clear)
             {
                 return true;
             }
@@ -122,7 +122,7 @@ public class Board
         var sb = new StringBuilder();
         for (int row = 0; row < board.GetLength(1); row++)
         {
-            foreach (var c in Row(row).Select(b => (char) b.kind))
+            foreach (var c in Row(row).Select(b => (char) b.Kind))
             {
                 sb.Append(c);
             }

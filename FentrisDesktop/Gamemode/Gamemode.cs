@@ -11,7 +11,7 @@ public class Gamemode
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
-    public int Gravity => 8; // gravity ticks per frame
+    public int Gravity => 0; // gravity ticks per frame
     public int Das => 10;
     public int Arr => 2;
     public int Are => 10;
@@ -75,7 +75,7 @@ public class Gamemode
 
     public bool ActivePieceTouchingStack()
     {
-        return Board.CollidePiece(ActivePiece, ActivePiece.X, ActivePiece.Y - 1);
+        return Board.CollidePiece(ActivePiece, ActivePiece.X, ActivePiece.Y + 1);
     }
 
     public bool HorizontalMove(int direction)
@@ -142,6 +142,10 @@ public class Gamemode
         }
 
         ChargeDas(input);
+        if (ActivePieceTouchingStack())
+        {
+            Console.WriteLine("down");
+        }
 
         switch (State)
         {
@@ -149,6 +153,11 @@ public class Gamemode
                 HandleRotation();
                 ApplyGravity(Gravity + (input.SoftDrop ? 256 : 0) + (input.SonicDrop ? 9999 : 0));
                 HandleMovement();
+
+                if (ActivePieceTouchingStack() && input.SoftDrop)
+                {
+                    LockPiece();
+                }
 
                 break;
         }
@@ -181,9 +190,10 @@ public class Gamemode
         }
     }
 
-    protected void PlacePiece()
+    protected void LockPiece()
     {
         Board.PlacePiece(ActivePiece);
+        State = Board.FullRows().Any() ? GamemodeState.LineClear : GamemodeState.Are;
         CycleNext();
     }
 

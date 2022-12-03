@@ -46,8 +46,9 @@ public class GamemodeRenderer : GameScreen
         DrawBoard();
 
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge}", Vector2.Zero, Color.White);
+        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY}", Vector2.Zero, Color.White);
         SpriteBatch.DrawString(Font, Mode.State.ToString(), new Vector2(0, 30), Color.White);
+        SpriteBatch.DrawString(Font, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
         SpriteBatch.End();
     }
 
@@ -78,15 +79,18 @@ public class GamemodeRenderer : GameScreen
             for (int x = 0; x < Mode.Board.board.GetLength(0); x++)
             {
                 var block = Mode.Board[x, y];
-                if (block.kind != BlockKind.Clear)
+                if (block.Kind != BlockKind.Clear)
                 {
-                    DrawBoardBlock(block.kind, x, y);
+                    DrawBoardBlock(block.Kind, x, y);
                 }
             }
         }
 
-        DrawActivePiece();
-        
+        if (Mode.State == GamemodeState.Placement)
+        {
+            DrawActivePiece();
+        }
+
         SpriteBatch.DrawRectangle(0, 0, BoardRenderTarget.Width,
             BoardRenderTarget.Height, Color.White, BoardBorderThickness);
 
