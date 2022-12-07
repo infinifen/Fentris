@@ -118,10 +118,20 @@ public class Gamemode
 
     public void Rotate(int direction)
     {
+        var kicks = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (1, -1), (-1, -1) };
+
         var oldRotation = ActivePiece.Rotation;
         // rotation system stuff will go here later
         ActivePiece.Rotation += direction;
-        if (!Board.CollidePiece(ActivePiece)) return; // successful natural rotation
+        foreach (var (dx, dy) in kicks)
+        {
+            if (!Board.CollidePiece(ActivePiece, ActivePiece.X + dx, ActivePiece.Y + dy))
+            {
+                ActivePiece.X += dx;
+                ActivePiece.Y += dy;
+                return; // successful natural rotation
+            }
+        }
 
         // natural rotation blocked, for now just fail the rotation
         ActivePiece.Rotation = oldRotation;
@@ -187,6 +197,7 @@ public class Gamemode
             {
                 Rotate(-1);
             }
+
             if (input.RotateCw)
             {
                 Rotate(1);
