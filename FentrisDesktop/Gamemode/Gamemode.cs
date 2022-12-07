@@ -73,6 +73,31 @@ public class Gamemode
         {
             return BlockKind.Yellow;
         }
+        
+        if (shape.Equals(Tetrominoes.T))
+        {
+            return BlockKind.Cyan;
+        }
+
+        if (shape.Equals(Tetrominoes.L))
+        {
+            return BlockKind.Orange;
+        }
+
+        if (shape.Equals(Tetrominoes.J))
+        {
+            return BlockKind.Blue;
+        }
+
+        if (shape.Equals(Tetrominoes.S))
+        {
+            return BlockKind.Magenta;
+        }
+        
+        if (shape.Equals(Tetrominoes.Z))
+        {
+            return BlockKind.Green;
+        }
 
         return BlockKind.Bone;
     }
