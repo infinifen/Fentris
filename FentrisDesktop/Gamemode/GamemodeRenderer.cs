@@ -66,7 +66,7 @@ public class GamemodeRenderer : GameScreen
     protected void DrawBoard()
     {
         var boardH = Game.H - Layout.Margin * 2;
-        var boardW = boardH / (BoardRenderTarget.Height / BoardRenderTarget.Width);
+        var boardW = (int) (boardH / ((float) BoardRenderTarget.Height / BoardRenderTarget.Width));
 
         var rx = Game.W / 2 - boardW / 2;
         var ry = Layout.Margin;
