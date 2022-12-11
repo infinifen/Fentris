@@ -62,7 +62,7 @@ public class GamemodeRenderer : GameScreen
         }
     }
 
-    private void DrawBoard()
+    protected void DrawBoard()
     {
         var boardH = Game.H - Layout.Margin * 2;
         var boardW = boardH / 2;
@@ -103,7 +103,7 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.End();
     }
 
-    private void DrawBoardBlock(BlockKind kind, int x, int y)
+    protected void DrawBoardBlock(BlockKind kind, int x, int y)
     {
         // board render target minus border is 640x1280, so a single mino is 64x64
         // y - 1 is there because of the vanish row, the first actual row that should be visible is row y=1
