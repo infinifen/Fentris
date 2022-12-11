@@ -10,10 +10,8 @@ namespace FentrisDesktop.Gamemode;
 public class GamemodeRenderer : GameScreen
 {
     private new FentrisGame Game => (FentrisGame)base.Game;
-
     protected RenderTarget2D BoardRenderTarget;
     protected SpriteBatch SpriteBatch;
-    protected int BoardBorderThickness = 5;
     protected FentrisDesktop.Gamemode.Gamemode Mode;
     protected InputHandler InputHandler;
     protected SpriteFont Font;
@@ -23,7 +21,8 @@ public class GamemodeRenderer : GameScreen
     {
         Mode = mode;
         BoardRenderTarget =
-            new RenderTarget2D(game.GraphicsDevice, 640 + BoardBorderThickness * 2, 1280 + BoardBorderThickness * 2,
+            new RenderTarget2D(game.GraphicsDevice, 640 + Layout.BoardBorderThickness * 2,
+                1280 + Layout.BoardBorderThickness * 2 + Layout.PreviewHeight,
                 false, SurfaceFormat.Alpha8, DepthFormat.None);
         InputHandler = new InputHandler();
     }
@@ -47,7 +46,9 @@ public class GamemodeRenderer : GameScreen
         DrawBoard();
 
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(Font, $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY} {Mode.LockDelayLeft}", Vector2.Zero, Color.White);
+        SpriteBatch.DrawString(Font,
+            $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY} {Mode.LockDelayLeft}",
+            Vector2.Zero, Color.White);
         SpriteBatch.DrawString(Font, Mode.State.ToString(), new Vector2(0, 30), Color.White);
         SpriteBatch.DrawString(Font, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
         SpriteBatch.End();
@@ -65,7 +66,7 @@ public class GamemodeRenderer : GameScreen
     protected void DrawBoard()
     {
         var boardH = Game.H - Layout.Margin * 2;
-        var boardW = boardH / 2;
+        var boardW = boardH / (BoardRenderTarget.Height / BoardRenderTarget.Width);
 
         var rx = Game.W / 2 - boardW / 2;
         var ry = Layout.Margin;
@@ -91,8 +92,10 @@ public class GamemodeRenderer : GameScreen
             DrawActivePiece();
         }
 
-        SpriteBatch.DrawRectangle(0, 0, BoardRenderTarget.Width,
-            BoardRenderTarget.Height, Color.White, BoardBorderThickness);
+        DrawNextQueue();
+
+        SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
+            BoardRenderTarget.Height - Layout.BoardStartY, Color.White, Layout.BoardBorderThickness);
 
         SpriteBatch.End();
         Game.GraphicsDevice.SetRenderTarget(null);
@@ -103,13 +106,32 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.End();
     }
 
+    protected void DrawNextQueue()
+    {
+        int i = 0;
+        foreach (var shape in Mode.Next)
+        {
+            var s = (int) (Layout.PreviewMinoSize * (i == 0 ? 1 : 0.5));
+            foreach (var (bx, by) in shape.BlockOffsets[0])
+            {
+                DrawBlock(Mode.GetPieceKindForShape(shape), i + bx * s,
+                    Layout.PreviewMargin + by * s, s);
+            }
+
+            i += 5 * s;
+        }
+    }
+
     protected void DrawBoardBlock(BlockKind kind, int x, int y)
     {
         // board render target minus border is 640x1280, so a single mino is 64x64
         // y - 1 is there because of the vanish row, the first actual row that should be visible is row y=1
-        SpriteBatch.FillRectangle(new Vector2(x * 64 + BoardBorderThickness, (y - 1) * 64 + BoardBorderThickness),
-            new Size2(64, 64),
-            kind.Color());
+        DrawBlock(kind, x * 64 + Layout.BoardBorderThickness, (y - 1) * 64 + Layout.BoardStartY, 64);
+    }
+
+    protected void DrawBlock(BlockKind kind, int screenX, int screenY, int size)
+    {
+        SpriteBatch.FillRectangle(new Vector2(screenX, screenY), new Size2(size, size), kind.Color());
     }
 
     public override void UnloadContent()
@@ -122,9 +144,14 @@ public class GamemodeRenderer : GameScreen
 public struct LayoutInfo
 {
     public int Margin = 40;
+    public int BoardBorderThickness = 5;
+    public int PreviewMinoSize = 64;
+    public int PreviewMargin = 10;
+    public int PreviewHeight => 4 * PreviewMinoSize + 2 * PreviewMargin;
+    public int BoardStartY => BoardBorderThickness + PreviewHeight;
+
 
     public LayoutInfo()
     {
-        
     }
 }
