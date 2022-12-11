@@ -17,6 +17,7 @@ public class GamemodeRenderer : GameScreen
     protected FentrisDesktop.Gamemode.Gamemode Mode;
     protected InputHandler InputHandler;
     protected SpriteFont Font;
+    protected LayoutInfo Layout = new();
 
     public GamemodeRenderer(FentrisGame game, FentrisDesktop.Gamemode.Gamemode mode) : base(game)
     {
@@ -63,12 +64,11 @@ public class GamemodeRenderer : GameScreen
 
     private void DrawBoard()
     {
-        var margin = 40;
-        var boardH = Game.H - margin * 2;
+        var boardH = Game.H - Layout.Margin * 2;
         var boardW = boardH / 2;
 
         var rx = Game.W / 2 - boardW / 2;
-        var ry = margin;
+        var ry = Layout.Margin;
 
         Game.GraphicsDevice.SetRenderTarget(BoardRenderTarget);
         Game.GraphicsDevice.Clear(Color.Transparent);
@@ -116,5 +116,15 @@ public class GamemodeRenderer : GameScreen
     {
         BoardRenderTarget.Dispose();
         base.UnloadContent();
+    }
+}
+
+public struct LayoutInfo
+{
+    public int Margin = 40;
+
+    public LayoutInfo()
+    {
+        
     }
 }
