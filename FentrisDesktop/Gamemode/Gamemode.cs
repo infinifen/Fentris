@@ -50,10 +50,10 @@ public class Gamemode
         Board = new Board.Board();
         Randomizer = new TestRandomizer();
         Next = new(Enumerable.Range(0, NextAmount).Select(_ => Randomizer.GenerateNext()));
-        CycleNext();
+        OnNewPiece();
     }
 
-    public void CycleNext()
+    public void OnNewPiece()
     {
         var nextShape = Next.Dequeue();
         ActivePiece = new Piece(nextShape, 0, 3, 0, GetPieceKindForShape(nextShape));
@@ -174,6 +174,15 @@ public class Gamemode
         if (State == GamemodeState.Are && SinceLastStateChange >= Are)
         {
             State = GamemodeState.Placement;
+            if (input.IrsCw)
+            {
+                ActivePiece.Rotation = 1;
+            }
+
+            if (input.IrsCcw)
+            {
+                ActivePiece.Rotation = 3;
+            }
         }
 
         if (State == GamemodeState.LineAre && SinceLastStateChange >= LineAre)
@@ -255,7 +264,7 @@ public class Gamemode
     {
         Board.PlacePiece(ActivePiece);
         State = Board.FullRows().Any() ? GamemodeState.LineClear : GamemodeState.Are;
-        CycleNext();
+        OnNewPiece();
     }
 
     private void ChargeDas(GamemodeInputs input)
