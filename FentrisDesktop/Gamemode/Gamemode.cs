@@ -56,13 +56,13 @@ public class Gamemode
     public void CycleNext()
     {
         var nextShape = Next.Dequeue();
-        ActivePiece = new Piece(nextShape, 0, 3, 0, GetPieceColor(nextShape));
+        ActivePiece = new Piece(nextShape, 0, 3, 0, GetPieceKindForShape(nextShape));
         LockDelayLeft = LockDelay;
         HighestYSeen = -8;
         Next.Enqueue(Randomizer.GenerateNext());
     }
 
-    protected BlockKind GetPieceColor(PieceShape shape)
+    public BlockKind GetPieceKindForShape(PieceShape shape)
     {
         if (shape.Equals(Tetrominoes.I))
         {
