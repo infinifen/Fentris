@@ -96,15 +96,15 @@ public class Board
 
     public bool CollidePiece(Piece p) => CollidePiece(p, p.X, p.Y);
 
-    public void PlacePiece(Piece p, int x, int y)
+    public void PlacePiece(Piece p, int x, int y, int frame = 0)
     {
         foreach (var (bx, by) in p.GetBlockOffsets())
         {
-            this[x + bx, y + by] = new Block(p.Kind);
+            this[x + bx, y + by] = new Block(p.Kind, frame);
         }
     }
 
-    public void PlacePiece(Piece p) => PlacePiece(p, p.X, p.Y);
+    public void PlacePiece(Piece p, int frame = 0) => PlacePiece(p, p.X, p.Y, frame);
 
     public int GetGhostY(Piece p, int x, int y)
     {

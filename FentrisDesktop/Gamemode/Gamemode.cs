@@ -287,7 +287,7 @@ public class Gamemode
 
     protected void LockPiece()
     {
-        Board.PlacePiece(ActivePiece);
+        Board.PlacePiece(ActivePiece, FrameCount);
         State = Board.FullRows().Any() ? GamemodeState.LineClear : GamemodeState.Are;
         OnNewPiece();
     }
