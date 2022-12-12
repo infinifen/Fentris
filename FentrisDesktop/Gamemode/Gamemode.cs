@@ -48,7 +48,7 @@ public class Gamemode
     {
         NextAmount = 3; // to be specified by each subclass ig
         Board = new Board.Board();
-        Randomizer = new TestRandomizer();
+        Randomizer = new History6RollRandomizer();
         Next = new(Enumerable.Range(0, NextAmount).Select(_ => Randomizer.GenerateNext()));
         OnNewPiece();
     }
