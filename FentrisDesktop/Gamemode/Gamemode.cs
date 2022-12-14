@@ -262,11 +262,13 @@ public class Gamemode
         if (input.IrsCw)
         {
             Rotate(1, false);
+            input.RotateCw = false; // block regular rotation on the frame IRS goes out so it doesn't double-rotate the piece
         }
 
         if (input.IrsCcw)
         {
             Rotate(-1, false);
+            input.RotateCcw = false; // same as above
         }
 
         if (Board.CollidePiece(ActivePiece))
