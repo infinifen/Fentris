@@ -141,26 +141,33 @@ public class Gamemode
         }
     }
 
-    public void Rotate(int direction)
+    public void Rotate(int direction, bool kick = true)
     {
         var kicks = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (1, -1), (-1, -1) };
 
         var oldRotation = ActivePiece.Rotation;
         // rotation system stuff will go here later
         ActivePiece.Rotation += direction;
-        foreach (var (dx, dy) in kicks)
+        if (kick)
         {
-            if (!Board.CollidePiece(ActivePiece, ActivePiece.X + dx, ActivePiece.Y + dy))
+            foreach (var (dx, dy) in kicks)
             {
-                ActivePiece.X += dx;
-                ActivePiece.Y += dy;
-                return; // successful natural rotation
+                if (!Board.CollidePiece(ActivePiece, ActivePiece.X + dx, ActivePiece.Y + dy))
+                {
+                    ActivePiece.X += dx;
+                    ActivePiece.Y += dy;
+                    return; // successful natural rotation
+                }
             }
         }
+        else
+        {
+            if (!Board.CollidePiece(ActivePiece)) return;
+        }
+
 
         // natural rotation blocked, for now just fail the rotation
         ActivePiece.Rotation = oldRotation;
-        return;
     }
 
     public void Frame(GamemodeInputs input)
@@ -174,20 +181,18 @@ public class Gamemode
         if (State == GamemodeState.Are && SinceLastStateChange >= Are)
         {
             State = GamemodeState.Placement;
-            if (input.IrsCw)
-            {
-                ActivePiece.Rotation = 1;
-            }
-
-            if (input.IrsCcw)
-            {
-                ActivePiece.Rotation = 3;
-            }
+            OnPieceEnter(input);
         }
 
         if (State == GamemodeState.LineAre && SinceLastStateChange >= LineAre)
         {
             State = GamemodeState.Placement;
+            OnPieceEnter(input);
+        }
+
+        if (State == GamemodeState.Gameover)
+        {
+            return;
         }
 
         ChargeDas(input);
@@ -249,6 +254,24 @@ public class Gamemode
                 HorizontalMove(input.Direction.ToInt());
                 ArrCharge = 0;
             }
+        }
+    }
+
+    protected void OnPieceEnter(GamemodeInputs input)
+    {
+        if (input.IrsCw)
+        {
+            Rotate(1, false);
+        }
+
+        if (input.IrsCcw)
+        {
+            Rotate(-1, false);
+        }
+
+        if (Board.CollidePiece(ActivePiece))
+        {
+            State = GamemodeState.Gameover;
         }
     }
 
