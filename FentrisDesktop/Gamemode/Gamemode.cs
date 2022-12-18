@@ -11,13 +11,14 @@ public class Gamemode
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
-    public int Gravity => 48; // gravity ticks per frame
+    public int Gravity => 4; // gravity ticks per frame
     public int Das => 10;
     public int Arr => 2;
-    public int Are => 10;
-    public int LineAre => 8;
+    public int Are => 20;
+    public int LineAre => 16;
     public int LineClearDelay => 20;
     public int LockDelay => 30;
+    public float LockDelayRatio => LockDelayLeft / (float) LockDelay;
     public int LockDelayLeft;
     public int HighestYSeen;
 
@@ -38,6 +39,7 @@ public class Gamemode
 
     protected int LastStateChangeFrame;
     public int SinceLastStateChange => FrameCount - LastStateChangeFrame;
+    public bool GhostPieceEnabled => true;
 
     public IRandomizer Randomizer;
 
@@ -109,7 +111,6 @@ public class Gamemode
 
     public bool HorizontalMove(int direction)
     {
-        Console.WriteLine($"hm {direction} {FrameCount}");
         if (Board.CollidePiece(ActivePiece, ActivePiece.X + direction, ActivePiece.Y))
         {
             return false;
@@ -143,6 +144,7 @@ public class Gamemode
 
     public void Rotate(int direction, bool kick = true)
     {
+        Console.WriteLine($"rot {direction} {kick} f={FrameCount}");
         var kicks = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (1, -1), (-1, -1) };
 
         var oldRotation = ActivePiece.Rotation;
@@ -181,13 +183,17 @@ public class Gamemode
         if (State == GamemodeState.Are && SinceLastStateChange >= Are)
         {
             State = GamemodeState.Placement;
-            OnPieceEnter(input);
+            OnNewPiece();
+            OnPieceEnter(ref input);
+            Console.WriteLine($"afterIrs {input}");
         }
 
         if (State == GamemodeState.LineAre && SinceLastStateChange >= LineAre)
         {
             State = GamemodeState.Placement;
-            OnPieceEnter(input);
+            OnNewPiece();
+            OnPieceEnter(ref input);
+            Console.WriteLine($"afterIrs {input}");
         }
 
         if (State == GamemodeState.Gameover)
@@ -196,10 +202,6 @@ public class Gamemode
         }
 
         ChargeDas(input);
-        if (ActivePieceTouchingStack())
-        {
-            Console.WriteLine("down");
-        }
 
         switch (State)
         {
@@ -257,7 +259,7 @@ public class Gamemode
         }
     }
 
-    protected void OnPieceEnter(GamemodeInputs input)
+    protected void OnPieceEnter(ref GamemodeInputs input)
     {
         if (input.IrsCw)
         {
@@ -289,7 +291,6 @@ public class Gamemode
     {
         Board.PlacePiece(ActivePiece, FrameCount);
         State = Board.FullRows().Any() ? GamemodeState.LineClear : GamemodeState.Are;
-        OnNewPiece();
     }
 
     private void ChargeDas(GamemodeInputs input)

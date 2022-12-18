@@ -51,15 +51,22 @@ public class GamemodeRenderer : GameScreen
             Vector2.Zero, Color.White);
         SpriteBatch.DrawString(Font, Mode.State.ToString(), new Vector2(0, 30), Color.White);
         SpriteBatch.DrawString(Font, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
+        SpriteBatch.DrawString(Font, InputHandler.GetInputs().ToString(), new Vector2(0, 100), Color.White);
+        SpriteBatch.DrawString(Font, (1f - Mode.LockDelayRatio).ToString(), new Vector2(0, 140), Color.White);
         SpriteBatch.End();
     }
 
     protected void DrawActivePiece()
     {
         var p = Mode.ActivePiece;
+        var ghostY = Mode.Board.GetGhostY(Mode.ActivePiece);
         foreach (var (bx, by) in p.GetBlockOffsets())
         {
-            DrawBoardBlock(p.Kind, p.X + bx, p.Y + by);
+            DrawBoardBlock(p.Kind, p.X + bx, p.Y + by, 0.9f - 1.2f * Mode.LockDelayRatio, 1f);
+            if (Mode.GhostPieceEnabled)
+            {
+                DrawBoardBlock(p.Kind, p.X + bx, ghostY + by, 0, 0.2f);
+            }
         }
     }
 
@@ -122,16 +129,19 @@ public class GamemodeRenderer : GameScreen
         }
     }
 
-    protected void DrawBoardBlock(BlockKind kind, int x, int y)
+    protected void DrawBoardBlock(BlockKind kind, int x, int y, float blackness = 0, float opacity = 1)
     {
         // board render target minus border is 640x1280, so a single mino is 64x64
         // y - 1 is there because of the vanish row, the first actual row that should be visible is row y=1
-        DrawBlock(kind, x * 64 + Layout.BoardBorderThickness, (y - 1) * 64 + Layout.BoardStartY, 64);
+        DrawBlock(kind, x * 64 + Layout.BoardBorderThickness, (y - 1) * 64 + Layout.BoardStartY, 64, blackness, opacity);
     }
 
-    protected void DrawBlock(BlockKind kind, int screenX, int screenY, int size)
+    protected void DrawBlock(BlockKind kind, int screenX, int screenY, int size, float blackness = 0, float opacity = 1)
     {
-        SpriteBatch.FillRectangle(new Vector2(screenX, screenY), new Size2(size, size), kind.Color());
+        var blacked = Color.Multiply(kind.Color(), 1 - blackness);
+        blacked.A = Byte.MaxValue; // set up for the lerp because multiplying the alpha was never actually wanted
+        var alpha = Color.Lerp(Color.Transparent, blacked, opacity);
+        SpriteBatch.FillRectangle(new Vector2(screenX, screenY), new Size2(size, size), alpha);
     }
 
     public override void UnloadContent()
