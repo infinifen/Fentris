@@ -8,7 +8,7 @@ public class Tetrominoes
         new[] { (0, 1), (1, 1), (2, 1), (3, 1) },
         new[] { (2, 0), (2, 1), (2, 2), (2, 3) },
         new[] { (0, 1), (1, 1), (2, 1), (3, 1) },
-        new[] { (2, 0), (2, 1), (2, 2), (2, 3) }
+        new[] { (1, 0), (1, 1), (1, 2), (1, 3) }
     });
 
     public static readonly PieceShape O = new(new[]
