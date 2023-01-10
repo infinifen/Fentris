@@ -2,6 +2,7 @@
 
 public enum GamemodeState
 {
+    ReadyGo,
     Placement,
     Are,
     LineAre,

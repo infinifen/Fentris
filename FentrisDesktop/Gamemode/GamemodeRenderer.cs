@@ -82,6 +82,13 @@ public class GamemodeRenderer : GameScreen
         Game.GraphicsDevice.Clear(Color.Transparent);
 
         SpriteBatch.Begin();
+
+        if (Mode.State == GamemodeState.ReadyGo)
+        {
+            SpriteBatch.DrawString(Font, (1 + Mode.StartupLeft / 60).ToString(), new Vector2(320, 640), Color.White, 0,
+                Vector2.Zero, 9, SpriteEffects.None, 1);
+        }
+
         for (int y = 1; y < Mode.Board.board.GetLength(1); y++) // start from 1 because of vanish row
         {
             for (int x = 0; x < Mode.Board.board.GetLength(0); x++)
@@ -105,8 +112,7 @@ public class GamemodeRenderer : GameScreen
 
         DrawNextQueue();
 
-        SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
-            BoardRenderTarget.Height - Layout.BoardStartY, Color.White, Layout.BoardBorderThickness);
+        DrawBorder();
 
         SpriteBatch.End();
         Game.GraphicsDevice.SetRenderTarget(null);
@@ -115,6 +121,12 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.Begin();
         SpriteBatch.Draw(BoardRenderTarget, new Rectangle(rx, ry, boardW, boardH), Color.White);
         SpriteBatch.End();
+    }
+
+    protected void DrawBorder()
+    {
+        SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
+            BoardRenderTarget.Height - Layout.BoardStartY, Color.White, Layout.BoardBorderThickness);
     }
 
     protected void DrawNextQueue()

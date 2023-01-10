@@ -11,6 +11,9 @@ public class Gamemode
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
+    public int StartupDuration = 120;
+    public int StartupLeft => Math.Max(0, StartupDuration - FrameCount);
+
     public int Gravity => 4; // gravity ticks per frame
     public int Das => 10;
     public int Arr => 2;
@@ -18,14 +21,14 @@ public class Gamemode
     public int LineAre => 16;
     public int LineClearDelay => 20;
     public int LockDelay => 30;
-    public float LockDelayRatio => LockDelayLeft / (float) LockDelay;
+    public float LockDelayRatio => LockDelayLeft / (float)LockDelay;
     public int LockDelayLeft;
     public int HighestYSeen;
 
     public int DasCharge = 0;
     public int ArrCharge = 0;
 
-    protected GamemodeState _state = GamemodeState.Placement;
+    protected GamemodeState _state = GamemodeState.ReadyGo;
 
     public GamemodeState State
     {
@@ -181,6 +184,12 @@ public class Gamemode
 
     public void Frame(GamemodeInputs input)
     {
+        // actually start the game
+        if (FrameCount == StartupDuration && State == GamemodeState.ReadyGo)
+        {
+            State = GamemodeState.Placement;
+        }
+
         if (State == GamemodeState.LineClear && SinceLastStateChange >= LineClearDelay)
         {
             OnLineClearEnd();
@@ -293,6 +302,7 @@ public class Gamemode
         {
             Board.ClearRow(row);
         }
+
         CurrentFullRows.Clear();
     }
 
