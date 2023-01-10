@@ -73,7 +73,7 @@ public class GamemodeRenderer : GameScreen
     protected void DrawBoard()
     {
         var boardH = Game.H - Layout.Margin * 2;
-        var boardW = (int) (boardH / ((float) BoardRenderTarget.Height / BoardRenderTarget.Width));
+        var boardW = (int)(boardH / ((float)BoardRenderTarget.Height / BoardRenderTarget.Width));
 
         var rx = Game.W / 2 - boardW / 2;
         var ry = Layout.Margin;
@@ -89,7 +89,11 @@ public class GamemodeRenderer : GameScreen
                 var block = Mode.Board[x, y];
                 if (block.Kind != BlockKind.Clear)
                 {
-                    DrawBoardBlock(block.Kind, x, y);
+                    var contains = Mode.CurrentFullRows.Contains(y);
+                    float opacity = (float)(contains
+                        ? 1f - Math.Pow(Mode.SinceLastStateChange / (float)Mode.LineClearDelay, 4)
+                        : 1f);
+                    DrawBoardBlock(block.Kind, x, y, 0, opacity);
                 }
             }
         }
@@ -118,7 +122,7 @@ public class GamemodeRenderer : GameScreen
         int i = 0;
         foreach (var shape in Mode.Next)
         {
-            var s = (int) (Layout.PreviewMinoSize * (i == 0 ? 1 : 0.5));
+            var s = (int)(Layout.PreviewMinoSize * (i == 0 ? 1 : 0.5));
             foreach (var (bx, by) in shape.BlockOffsets[0])
             {
                 DrawBlock(Mode.GetPieceKindForShape(shape), i + bx * s,
@@ -133,7 +137,8 @@ public class GamemodeRenderer : GameScreen
     {
         // board render target minus border is 640x1280, so a single mino is 64x64
         // y - 1 is there because of the vanish row, the first actual row that should be visible is row y=1
-        DrawBlock(kind, x * 64 + Layout.BoardBorderThickness, (y - 1) * 64 + Layout.BoardStartY, 64, blackness, opacity);
+        DrawBlock(kind, x * 64 + Layout.BoardBorderThickness, (y - 1) * 64 + Layout.BoardStartY, 64, blackness,
+            opacity);
     }
 
     protected void DrawBlock(BlockKind kind, int screenX, int screenY, int size, float blackness = 0, float opacity = 1)

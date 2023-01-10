@@ -44,6 +44,8 @@ public class Gamemode
     public IRandomizer Randomizer;
 
     public int FrameCount;
+
+    public List<int> CurrentFullRows = new();
     // rotation system goes here later
 
     public Gamemode()
@@ -291,12 +293,22 @@ public class Gamemode
         {
             Board.ClearRow(row);
         }
+        CurrentFullRows.Clear();
     }
 
     protected void LockPiece()
     {
         Board.PlacePiece(ActivePiece, FrameCount);
-        State = Board.FullRows().Any() ? GamemodeState.LineClear : GamemodeState.Are;
+        var full = Board.FullRows();
+        if (full.Any())
+        {
+            State = GamemodeState.LineClear;
+            CurrentFullRows = full.ToList();
+        }
+        else
+        {
+            State = GamemodeState.Are;
+        }
     }
 
     private void ChargeDas(GamemodeInputs input)
