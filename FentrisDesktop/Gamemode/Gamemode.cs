@@ -75,7 +75,7 @@ public class Gamemode
         {
             return BlockKind.Yellow;
         }
-        
+
         if (shape.Equals(Tetrominoes.T))
         {
             return BlockKind.Cyan;
@@ -95,7 +95,7 @@ public class Gamemode
         {
             return BlockKind.Magenta;
         }
-        
+
         if (shape.Equals(Tetrominoes.Z))
         {
             return BlockKind.Green;
@@ -144,14 +144,19 @@ public class Gamemode
 
     public void Rotate(int direction, bool kick = true)
     {
-        Console.WriteLine($"rot {direction} {kick} f={FrameCount}");
-        var kicks = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (1, -1), (-1, -1) };
+        var kicksCw = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, 2), (-1, 2) };
+        var kicksCcw = new List<(int, int)> { (0, 0), (-1, 0), (1, 0), (-1, 1), (1, 1), (-1, 2), (1, 2) };
+        var kicksICw = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (0, 1) };
+        var kicksICcw = new List<(int, int)> { (0, 0), (-1, 0), (1, 0), (0, 1) };
 
         var oldRotation = ActivePiece.Rotation;
         // rotation system stuff will go here later
         ActivePiece.Rotation += direction;
         if (kick)
         {
+            var (cw, ccw) =
+                ActivePiece.Shape.Equals(Tetrominoes.I) ? (kicksICw, kicksICcw) : (kicksCw, kicksCcw);
+            var kicks = direction > 0 ? cw : ccw;
             foreach (var (dx, dy) in kicks)
             {
                 if (!Board.CollidePiece(ActivePiece, ActivePiece.X + dx, ActivePiece.Y + dy))
@@ -264,7 +269,8 @@ public class Gamemode
         if (input.IrsCw)
         {
             Rotate(1, false);
-            input.RotateCw = false; // block regular rotation on the frame IRS goes out so it doesn't double-rotate the piece
+            input.RotateCw =
+                false; // block regular rotation on the frame IRS goes out so it doesn't double-rotate the piece
         }
 
         if (input.IrsCcw)
