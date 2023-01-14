@@ -302,6 +302,7 @@ public class Gamemode
 
         if (Board.CollidePiece(ActivePiece))
         {
+            Board.PlacePiece(ActivePiece);
             State = GamemodeState.Gameover;
         }
     }
