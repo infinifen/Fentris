@@ -14,7 +14,7 @@ public class Piece
 
     public int Rotation
     {
-        get => Mod(_rot, 4);
+        get => Mod(_rot, Shape.BlockOffsets.Length);
         set => _rot = value;
     }
 

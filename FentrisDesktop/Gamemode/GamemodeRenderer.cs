@@ -134,7 +134,7 @@ public class GamemodeRenderer : GameScreen
         int i = 0;
         foreach (var shape in Mode.Next)
         {
-            var s = (int)(Layout.PreviewMinoSize * (i == 0 ? 1 : 0.5));
+            var s = (int)(Layout.PreviewMinoSize * (i == 0 ? 1 : 1f / (Mode.NextAmount - 1f)));
             foreach (var (bx, by) in shape.BlockOffsets[0])
             {
                 DrawBlock(Mode.GetPieceKindForShape(shape), i + bx * s,

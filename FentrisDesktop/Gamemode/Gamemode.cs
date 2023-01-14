@@ -21,6 +21,10 @@ public class Gamemode
     public int LineAre => 16;
     public int LineClearDelay => 20;
     public int LockDelay => 30;
+    
+    public int PiecesPlaced { get; protected set; }
+    public int LinesCleared { get; protected set; }
+    
     public float LockDelayRatio => LockDelayLeft / (float)LockDelay;
     public int LockDelayLeft;
     public int HighestYSeen;
@@ -53,11 +57,11 @@ public class Gamemode
 
     public Gamemode()
     {
-        NextAmount = 3; // to be specified by each subclass ig
+        NextAmount = 2; // to be specified by each subclass ig
         Board = new Board.Board();
         Randomizer = new History6RollRandomizer();
         Next = new(Enumerable.Range(0, NextAmount).Select(_ => Randomizer.GenerateNext()));
-        OnNewPiece();
+        ActivePiece = new Piece(Tetrominoes.Empty, 0, 3, 0, BlockKind.Clear);
     }
 
     public void OnNewPiece()
@@ -67,6 +71,11 @@ public class Gamemode
         LockDelayLeft = LockDelay;
         HighestYSeen = -8;
         Next.Enqueue(Randomizer.GenerateNext());
+    }
+    
+    protected void OnStart()
+    {
+        OnNewPiece();
     }
 
     public BlockKind GetPieceKindForShape(PieceShape shape)
@@ -188,6 +197,7 @@ public class Gamemode
         if (FrameCount == StartupDuration && State == GamemodeState.ReadyGo)
         {
             State = GamemodeState.Placement;
+            OnStart();
         }
 
         if (State == GamemodeState.LineClear && SinceLastStateChange >= LineClearDelay)
@@ -309,11 +319,13 @@ public class Gamemode
     protected void LockPiece()
     {
         Board.PlacePiece(ActivePiece, FrameCount);
-        var full = Board.FullRows();
+        PiecesPlaced++;
+        var full = Board.FullRows().ToList();
         if (full.Any())
         {
             State = GamemodeState.LineClear;
-            CurrentFullRows = full.ToList();
+            CurrentFullRows = full;
+            LinesCleared += CurrentFullRows.Count;
         }
         else
         {

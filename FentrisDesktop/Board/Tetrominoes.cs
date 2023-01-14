@@ -1,8 +1,10 @@
-﻿namespace FentrisDesktop.Board;
+﻿using System;
+
+namespace FentrisDesktop.Board;
 
 public class Tetrominoes
 {
-    // ARS I piece for now
+    // the pieces are ARS, except for the 3-state I
     public static readonly PieceShape I = new(new[]
     {
         new[] { (0, 1), (1, 1), (2, 1), (3, 1) },
@@ -57,6 +59,11 @@ public class Tetrominoes
         new[] { (2, 0), (2, 1), (1, 1), (1, 2) },
         new[] { (0, 1), (1, 1), (1, 2), (2, 2) },
         new[] { (2, 0), (2, 1), (1, 1), (1, 2) },
+    });
+
+    public static readonly PieceShape Empty = new(new (int, int)[][]
+    {
+        Array.Empty<(int, int)>()
     });
 
     public static readonly PieceShape[] All = { I, O, T, L, J, S, Z };
