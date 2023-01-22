@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FentrisDesktop.Board;
@@ -11,21 +11,21 @@ public class Gamemode
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
     public readonly int NextAmount;
-    public int StartupDuration = 120;
+    public virtual int StartupDuration => 120;
     public int StartupLeft => Math.Max(0, StartupDuration - FrameCount);
 
-    public int Gravity => 4; // gravity ticks per frame
-    public int Das => 10;
-    public int Arr => 2;
-    public int Are => 20;
-    public int LineAre => 16;
-    public int LineClearDelay => 20;
-    public int LockDelay => 30;
+    public virtual int Gravity => 4; // gravity ticks per frame
+    public virtual int Das => 10;
+    public virtual int Arr => 2;
+    public virtual int Are => 20;
+    public virtual int LineAre => 16;
+    public virtual int LineClearDelay => 20;
+    public virtual int LockDelay => 30;
 
-    public int SectionLength => 100;
-    public int PiecesPlaced { get; protected set; }
-    public int LinesCleared { get; protected set; }
-    public int Level { get; protected set; }
+    public virtual int SectionLength => 100;
+    public virtual int PiecesPlaced { get; protected set; }
+    public virtual int LinesCleared { get; protected set; }
+    public virtual int Level { get; protected set; }
 
     public float LockDelayRatio => LockDelayLeft / (float)LockDelay;
     public int LockDelayLeft;
@@ -66,7 +66,7 @@ public class Gamemode
         ActivePiece = new Piece(Tetrominoes.Empty, 0, 3, 0, BlockKind.Clear);
     }
 
-    public void OnNewPiece()
+    public virtual void OnNewPiece()
     {
         var nextShape = Next.Dequeue();
         ActivePiece = new Piece(nextShape, 0, 3, 0, GetPieceKindForShape(nextShape));
@@ -75,7 +75,7 @@ public class Gamemode
         Next.Enqueue(Randomizer.GenerateNext());
     }
     
-    protected void OnStart()
+    protected virtual void OnStart()
     {
         OnNewPiece();
     }
@@ -125,7 +125,7 @@ public class Gamemode
         return Board.CollidePiece(ActivePiece, ActivePiece.X, ActivePiece.Y + 1);
     }
 
-    public bool HorizontalMove(int direction)
+    public virtual bool HorizontalMove(int direction)
     {
         if (Board.CollidePiece(ActivePiece, ActivePiece.X + direction, ActivePiece.Y))
         {
@@ -136,7 +136,7 @@ public class Gamemode
         return true;
     }
 
-    public void ApplyGravity(int gravity)
+    public virtual void ApplyGravity(int gravity)
     {
         var newSubY = ActivePiece.SubY + gravity;
 
@@ -158,7 +158,7 @@ public class Gamemode
         }
     }
 
-    public void Rotate(int direction, bool kick = true)
+    public virtual void Rotate(int direction, bool kick = true)
     {
         var kicksCw = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, 2), (-1, 2) };
         var kicksCcw = new List<(int, int)> { (0, 0), (-1, 0), (1, 0), (-1, 1), (1, 1), (-1, 2), (1, 2) };
@@ -193,7 +193,7 @@ public class Gamemode
         ActivePiece.Rotation = oldRotation;
     }
 
-    public void Frame(GamemodeInputs input)
+    public virtual void Frame(GamemodeInputs input)
     {
         // actually start the game
         if (FrameCount == StartupDuration && State == GamemodeState.ReadyGo)
@@ -287,7 +287,7 @@ public class Gamemode
         }
     }
 
-    protected void OnPieceEnter(ref GamemodeInputs input)
+    protected virtual void OnPieceEnter(ref GamemodeInputs input)
     {
         if (input.IrsCw)
         {
@@ -309,7 +309,7 @@ public class Gamemode
         }
     }
 
-    public void OnLineClearEnd()
+    public virtual void OnLineClearEnd()
     {
         foreach (var row in Board.FullRows())
         {
@@ -319,7 +319,7 @@ public class Gamemode
         CurrentFullRows.Clear();
     }
 
-    protected void LockPiece()
+    protected virtual void LockPiece()
     {
         Board.PlacePiece(ActivePiece, FrameCount);
         PiecesPlaced++;
