@@ -21,10 +21,12 @@ public class Gamemode
     public int LineAre => 16;
     public int LineClearDelay => 20;
     public int LockDelay => 30;
-    
+
+    public int SectionLength => 100;
     public int PiecesPlaced { get; protected set; }
     public int LinesCleared { get; protected set; }
-    
+    public int Level { get; protected set; }
+
     public float LockDelayRatio => LockDelayLeft / (float)LockDelay;
     public int LockDelayLeft;
     public int HighestYSeen;
@@ -321,12 +323,25 @@ public class Gamemode
     {
         Board.PlacePiece(ActivePiece, FrameCount);
         PiecesPlaced++;
+        if (Level % SectionLength != SectionLength - 1)
+        {
+            // is not levelstopped
+            Level++;
+        }
         var full = Board.FullRows().ToList();
         if (full.Any())
         {
             State = GamemodeState.LineClear;
             CurrentFullRows = full;
             LinesCleared += CurrentFullRows.Count;
+            Level += CurrentFullRows.Count switch
+            {
+                1 => 1,
+                2 => 2,
+                3 => 3,
+                4 => 5,
+                _ => 5
+            };
         }
         else
         {
