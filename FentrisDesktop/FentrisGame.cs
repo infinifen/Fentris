@@ -44,7 +44,7 @@ public class FentrisGame : Game
         Window.AllowUserResizing = true;
 
         base.Initialize();
-        _screenManager.LoadScreen(new GamemodeRenderer(this, new Gamemode.Gamemode()), new FadeTransition(GraphicsDevice, Color.Black));
+        _screenManager.LoadScreen(new GamemodeRenderer(this, new Gamemode.ApocalypseGamemode()), new FadeTransition(GraphicsDevice, Color.Black));
     }
 
     protected override void LoadContent()
