@@ -3,8 +3,12 @@ using Microsoft.Xna.Framework;
 
 namespace FentrisDesktop;
 
-public static class FentrisHelper
+public static class FentrisHelper 
 {
+    public static int Mod(int x, int m)
+    {
+        return (x % m + m) % m;
+    }
     public static Color Color(this BlockKind bk)
     {
         return bk switch

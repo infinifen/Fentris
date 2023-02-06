@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static FentrisDesktop.FentrisHelper;
 
 namespace FentrisDesktop.Board;
 
@@ -6,11 +7,6 @@ public class Piece
 {
     public PieceShape Shape;
     int _rot;
-
-    private static int Mod(int x, int m)
-    {
-        return (x % m + m) % m;
-    }
 
     public int Rotation
     {

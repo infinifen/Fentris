@@ -1,9 +1,11 @@
 ﻿using System;
 using FentrisDesktop.Board;
 using FentrisDesktop.Gamemode;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 
@@ -14,6 +16,7 @@ public class FentrisGame : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private readonly ScreenManager _screenManager;
+    public FontSystem DefaultFonts;
 
     public int W => _graphics.PreferredBackBufferWidth;
     public int H => _graphics.PreferredBackBufferHeight;
@@ -44,14 +47,29 @@ public class FentrisGame : Game
         Window.AllowUserResizing = true;
 
         base.Initialize();
-        _screenManager.LoadScreen(new GamemodeRenderer(this, new Gamemode.ApocalypseGamemode()), new FadeTransition(GraphicsDevice, Color.Black));
+        // _screenManager.LoadScreen(new GamemodeRenderer(this, new Gamemode.ApocalypseGamemode()), new FadeTransition(GraphicsDevice, Color.Black));
+        _screenManager.LoadScreen(new StartMenuScreen(this), new FadeTransition(GraphicsDevice, Color.Black));
+        // LoadMenu();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        var fontStream = Content.OpenStream("3270-Regular.ttf");
+        DefaultFonts = new FontSystem();
+        DefaultFonts.AddFont(fontStream);
 
         // TODO: use this.Content to load your game content here
+    }
+
+    public void LoadGamemode(Gamemode.Gamemode mode)
+    {
+        _screenManager.LoadScreen(new GamemodeRenderer(this, mode), new FadeTransition(GraphicsDevice, Color.Black));
+    }
+
+    public void LoadMenu()
+    {
+        _screenManager.LoadScreen(new StartMenuScreen(this), new ExpandTransition(GraphicsDevice, Color.Gray, 0.2F));
     }
 
     protected override void Update(GameTime gameTime)

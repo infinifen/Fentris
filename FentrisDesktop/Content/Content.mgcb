@@ -13,6 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin 3270-Regular.ttf
+/copy:3270-Regular.ttf
+
 #begin block.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -31,4 +34,7 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:default.spritefont
+
+#begin LICENSE_3270
+/copy:LICENSE_3270
 

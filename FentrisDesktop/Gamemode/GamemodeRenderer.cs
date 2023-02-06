@@ -38,8 +38,14 @@ public class GamemodeRenderer : GameScreen
     public override void Update(GameTime gameTime)
     {
         var inputs = InputHandler.GetInputs();
-
+        
+        if (Mode.State == GamemodeState.Gameover && (inputs.RotateCw || inputs.RotateCcw))
+        {
+            Game.LoadMenu();
+        }
+        
         Mode.Frame(inputs);
+        
         InputHandler.CycleInputStates();
     }
 
