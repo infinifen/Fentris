@@ -15,6 +15,7 @@ public class GamemodeRenderer : GameScreen
     protected FentrisDesktop.Gamemode.Gamemode Mode;
     protected InputHandler InputHandler;
     protected SpriteFont Font;
+    protected Texture2D BlockTexture;
     protected LayoutInfo Layout = new();
 
     public GamemodeRenderer(FentrisGame game, FentrisDesktop.Gamemode.Gamemode mode) : base(game)
@@ -31,6 +32,7 @@ public class GamemodeRenderer : GameScreen
     {
         SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
         Font = Content.Load<SpriteFont>("default");
+        BlockTexture = Content.Load<Texture2D>("block");
     }
 
     public override void Update(GameTime gameTime)
@@ -159,12 +161,14 @@ public class GamemodeRenderer : GameScreen
         var blacked = Color.Multiply(kind.Color(), 1 - blackness);
         blacked.A = Byte.MaxValue; // set up for the lerp because multiplying the alpha was never actually wanted
         var alpha = Color.Lerp(Color.Transparent, blacked, opacity);
-        SpriteBatch.FillRectangle(new Vector2(screenX, screenY), new Size2(size, size), alpha);
+        // SpriteBatch.FillRectangle(new Vector2(screenX, screenY), new Size2(size, size), alpha);
+        SpriteBatch.Draw(BlockTexture, new Vector2(screenX, screenY), alpha);
     }
 
     public override void UnloadContent()
     {
         BoardRenderTarget.Dispose();
+        BlockTexture.Dispose();
         base.UnloadContent();
     }
 }
