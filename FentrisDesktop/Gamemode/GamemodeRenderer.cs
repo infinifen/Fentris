@@ -30,6 +30,7 @@ public class GamemodeRenderer : GameScreen
 
     public override void LoadContent()
     {
+        Console.WriteLine("loadContent");
         SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
         Font = Content.Load<SpriteFont>("default");
         BlockTexture = Content.Load<Texture2D>("block");
@@ -173,8 +174,9 @@ public class GamemodeRenderer : GameScreen
 
     public override void UnloadContent()
     {
+        Console.WriteLine("unloadContent");
         BoardRenderTarget.Dispose();
-        BlockTexture.Dispose();
+        // BlockTexture.Dispose();
         base.UnloadContent();
     }
 }
