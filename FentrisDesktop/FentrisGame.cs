@@ -58,6 +58,7 @@ public class FentrisGame : Game
         var fontStream = Content.OpenStream("3270-Regular.ttf");
         DefaultFonts = new FontSystem();
         DefaultFonts.AddFont(fontStream);
+        DefaultFonts.CurrentAtlasFull += (e, a) => DefaultFonts.Reset();
 
         // TODO: use this.Content to load your game content here
     }
