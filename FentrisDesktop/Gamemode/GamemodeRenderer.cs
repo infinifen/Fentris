@@ -1,5 +1,6 @@
 ﻿using System;
 using FentrisDesktop.Board;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -14,7 +15,7 @@ public class GamemodeRenderer : GameScreen
     protected SpriteBatch SpriteBatch;
     protected FentrisDesktop.Gamemode.Gamemode Mode;
     protected InputHandler InputHandler;
-    protected SpriteFont Font;
+    protected DynamicSpriteFont DebugFont => Game.SmallFont;
     protected Texture2D BlockTexture;
     protected LayoutInfo Layout = new();
 
@@ -32,7 +33,6 @@ public class GamemodeRenderer : GameScreen
     {
         Console.WriteLine("loadContent");
         SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
-        Font = Content.Load<SpriteFont>("default");
         BlockTexture = Content.Load<Texture2D>("block");
     }
 
@@ -55,14 +55,14 @@ public class GamemodeRenderer : GameScreen
         DrawBoard();
 
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(Font,
+        SpriteBatch.DrawString(DebugFont,
             $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY} {Mode.LockDelayLeft}",
             Vector2.Zero, Color.White);
-        SpriteBatch.DrawString(Font, Mode.State.ToString(), new Vector2(0, 30), Color.White);
-        SpriteBatch.DrawString(Font, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
-        SpriteBatch.DrawString(Font, InputHandler.GetInputs().ToString(), new Vector2(0, 100), Color.White);
-        SpriteBatch.DrawString(Font, (1f - Mode.LockDelayRatio).ToString(), new Vector2(0, 140), Color.White);
-        SpriteBatch.DrawString(Font, $"lv{Mode.Level}", new Vector2(0, 400), Color.White);
+        SpriteBatch.DrawString(DebugFont, Mode.State.ToString(), new Vector2(0, 30), Color.White);
+        SpriteBatch.DrawString(DebugFont, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
+        SpriteBatch.DrawString(DebugFont, InputHandler.GetInputs().ToString(), new Vector2(0, 100), Color.White);
+        SpriteBatch.DrawString(DebugFont, (1f - Mode.LockDelayRatio).ToString(), new Vector2(0, 140), Color.White);
+        SpriteBatch.DrawString(DebugFont, $"lv{Mode.Level}", new Vector2(0, 400), Color.White);
         SpriteBatch.End();
     }
 
@@ -95,8 +95,11 @@ public class GamemodeRenderer : GameScreen
 
         if (Mode.State == GamemodeState.ReadyGo)
         {
-            SpriteBatch.DrawString(Font, (1 + Mode.StartupLeft / 60).ToString(), new Vector2(320, 640), Color.White, 0,
-                Vector2.Zero, 9, SpriteEffects.None, 1);
+            var countdownFont = Game.DefaultFonts.GetFont(120);
+            var secondsLeft = Mode.StartupLeft > 60 ? (Mode.StartupLeft / 60).ToString() : "Go!";
+            var renderSize = countdownFont.MeasureString(secondsLeft);
+            var renderPos = new Vector2(320, 640) - renderSize / 2;
+            SpriteBatch.DrawString(countdownFont, secondsLeft, renderPos, Color.White);
         }
 
         for (int y = 1; y < Mode.Board.board.GetLength(1); y++) // start from 1 because of vanish row
