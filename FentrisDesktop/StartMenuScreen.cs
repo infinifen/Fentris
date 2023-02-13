@@ -33,21 +33,9 @@ public class StartMenuScreen : GameScreen
     private MenuEntry CurrentMenuItem => Entries[Mod(_menuIdx, Entries.Length)];
     private int CurrentMenuIdx => Mod(_menuIdx, Entries.Length);
     private FentrisGame _game;
-    private DynamicSpriteFont _menuItemFont;
-    private DynamicSpriteFont _taglineFont;
     private SpriteBatch _spriteBatch;
     private Texture2D _keysBackground;
     private Effect _backgroundShader;
-
-    private int BaseFontSize
-    {
-        get
-        {
-            var smallerDim = Math.Min(_game.W, _game.H);
-            var fontSize = (smallerDim / 20 / 4) * 4; // lose precision on purpose to only load fonts in increments of 4
-            return Math.Max(fontSize, 12);
-        }
-    }
 
     public StartMenuScreen(FentrisGame game) : base(game)
     {
@@ -56,25 +44,15 @@ public class StartMenuScreen : GameScreen
 
     public override void LoadContent()
     {
-        ReloadFont();
         _spriteBatch = new SpriteBatch(_game.GraphicsDevice);
         _keysBackground = Content.Load<Texture2D>("tpiece_4k");
         _backgroundShader = Content.Load<Effect>("MainMenuBg");
-
-        Game.Window.ClientSizeChanged += (sender, args) => { ReloadFont(); };
-    }
-
-    private void ReloadFont()
-    {
-        var fontSize = BaseFontSize;
-        Console.WriteLine(fontSize);
-        _menuItemFont = _game.DefaultFonts.GetFont(fontSize);
-        _taglineFont = _game.DefaultFonts.GetFont(fontSize / 1.4f);
     }
 
 
     public override void UnloadContent()
     {
+        Console.WriteLine("menu_unloadContent");
         _spriteBatch.Dispose();
     }
 
@@ -114,15 +92,15 @@ public class StartMenuScreen : GameScreen
         for (int i = 0; i < Entries.Length; i++)
         {
             var item = Entries[i];
-            var measure = _menuItemFont.MeasureString(item.Title);
+            var measure = _game.LargeFont.MeasureString(item.Title);
             var x = _game.W / 2.0f - measure.X / 2.0f;
             var color = i == CurrentMenuIdx ? Color.Yellow : Color.White;
-            _spriteBatch.DrawString(_menuItemFont, item.Title, new Vector2(x, y), color);
+            _spriteBatch.DrawString(_game.LargeFont, item.Title, new Vector2(x, y), color);
             y += measure.Y * 2;
         }
 
-        var taglineMeasure = _taglineFont.MeasureString(CurrentMenuItem.Tagline);
-        _spriteBatch.DrawString(_taglineFont, CurrentMenuItem.Tagline,
+        var taglineMeasure = _game.MediumFont.MeasureString(CurrentMenuItem.Tagline);
+        _spriteBatch.DrawString(_game.MediumFont, CurrentMenuItem.Tagline,
             new Vector2(20, _game.H - taglineMeasure.Y - 20), Color.White);
 
 
