@@ -7,6 +7,8 @@ namespace FentrisDesktop.Gamemode;
 
 public class Gamemode
 {
+    public virtual string Id => "base";
+    
     public Board.Board Board;
     public Piece ActivePiece;
     public Queue<PieceShape> Next;
@@ -334,8 +336,13 @@ public class Gamemode
         }
         else
         {
+            OnNoLineClear();
             State = GamemodeState.Are;
         }
+    }
+
+    protected virtual void OnNoLineClear()
+    {
     }
 
     protected virtual void OnPieceLock()

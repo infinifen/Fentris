@@ -4,6 +4,7 @@ namespace FentrisDesktop.Gamemode;
 
 public class ApocalypseGamemode : Gamemode
 {
+    public override string Id => "apocalypse";
     public double SpeedLv { get; private set; } = 0;
     public override int Gravity => 5120;
 

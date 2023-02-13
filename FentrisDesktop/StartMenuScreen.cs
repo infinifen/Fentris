@@ -18,7 +18,7 @@ public class StartMenuScreen : GameScreen
     public static readonly MenuEntry[] Entries = new[]
     {
         new MenuEntry("Normal mode", "The classic beginner experience",
-            game => { game.LoadGamemode(new Gamemode.Gamemode()); },
+            game => { game.LoadGamemode(new Gamemode.NormalGamemode()); },
             new Color(0.1f, 0.73f, 0.2f, 1f)),
 
         new MenuEntry("Apocalypse", "Delay the descent into insanity.",

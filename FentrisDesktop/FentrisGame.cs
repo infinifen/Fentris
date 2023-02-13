@@ -81,7 +81,8 @@ public class FentrisGame : Game
 
     public void LoadGamemode(Gamemode.Gamemode mode)
     {
-        _screenManager.LoadScreen(new GamemodeRenderer(this, mode), new FadeTransition(GraphicsDevice, Color.Black));
+        var rendererConstructor = GamemodeRegistry.GetRendererForId(mode.Id);
+        _screenManager.LoadScreen(rendererConstructor(this, mode), new FadeTransition(GraphicsDevice, Color.Black));
     }
 
     public void LoadMenu()
