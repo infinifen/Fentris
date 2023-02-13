@@ -323,30 +323,40 @@ public class Gamemode
     {
         Board.PlacePiece(ActivePiece, FrameCount);
         PiecesPlaced++;
-        if (Level % SectionLength != SectionLength - 1)
-        {
-            // is not levelstopped
-            Level++;
-        }
+        OnPieceLock();
         var full = Board.FullRows().ToList();
         if (full.Any())
         {
             State = GamemodeState.LineClear;
             CurrentFullRows = full;
             LinesCleared += CurrentFullRows.Count;
-            Level += CurrentFullRows.Count switch
-            {
-                1 => 1,
-                2 => 2,
-                3 => 3,
-                4 => 5,
-                _ => 5
-            };
+            OnLineClear(full);
         }
         else
         {
             State = GamemodeState.Are;
         }
+    }
+
+    protected virtual void OnPieceLock()
+    {
+        if (Level % SectionLength != SectionLength - 1)
+        {
+            // is not levelstopped
+            Level++;
+        }
+    }
+
+    protected virtual void OnLineClear(List<int> full)
+    {
+        Level += CurrentFullRows.Count switch
+        {
+            1 => 1,
+            2 => 2,
+            3 => 3,
+            4 => 5,
+            _ => 5
+        };
     }
 
     private void ChargeDas(GamemodeInputs input)
