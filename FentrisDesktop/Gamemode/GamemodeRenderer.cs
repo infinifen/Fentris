@@ -66,7 +66,7 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.End();
     }
 
-    protected void DrawActivePiece()
+    protected virtual void DrawActivePiece()
     {
         var p = Mode.ActivePiece;
         var ghostY = Mode.Board.GetGhostY(Mode.ActivePiece);
@@ -80,7 +80,7 @@ public class GamemodeRenderer : GameScreen
         }
     }
 
-    protected void DrawBoard()
+    protected virtual void DrawBoard()
     {
         var boardH = Game.H - Layout.Margin * 2;
         var boardW = (int)(boardH / ((float)BoardRenderTarget.Height / BoardRenderTarget.Width));
@@ -136,13 +136,13 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.End();
     }
 
-    protected void DrawBorder()
+    protected virtual void DrawBorder()
     {
         SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
             BoardRenderTarget.Height - Layout.BoardStartY, Color.White, Layout.BoardBorderThickness);
     }
 
-    protected void DrawNextQueue()
+    protected virtual void DrawNextQueue()
     {
         int i = 0;
         foreach (var shape in Mode.Next)
@@ -158,7 +158,7 @@ public class GamemodeRenderer : GameScreen
         }
     }
 
-    protected void DrawBoardBlock(BlockKind kind, int x, int y, float blackness = 0, float opacity = 1)
+    protected virtual void DrawBoardBlock(BlockKind kind, int x, int y, float blackness = 0, float opacity = 1)
     {
         // board render target minus border is 640x1280, so a single mino is 64x64
         // y - 1 is there because of the vanish row, the first actual row that should be visible is row y=1
@@ -166,7 +166,7 @@ public class GamemodeRenderer : GameScreen
             opacity);
     }
 
-    protected void DrawBlock(BlockKind kind, int screenX, int screenY, int size, float blackness = 0, float opacity = 1)
+    protected virtual void DrawBlock(BlockKind kind, int screenX, int screenY, int size, float blackness = 0, float opacity = 1)
     {
         var blacked = Color.Multiply(kind.Color(), 1 - blackness);
         blacked.A = Byte.MaxValue; // set up for the lerp because multiplying the alpha was never actually wanted
