@@ -57,13 +57,13 @@ public class GamemodeRenderer : GameScreen
         DrawBoard();
 
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(DebugFont,
-            $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY} {Mode.LockDelayLeft}",
-            Vector2.Zero, Color.White);
-        SpriteBatch.DrawString(DebugFont, Mode.State.ToString(), new Vector2(0, 30), Color.White);
-        SpriteBatch.DrawString(DebugFont, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
-        SpriteBatch.DrawString(DebugFont, InputHandler.GetInputs().ToString(), new Vector2(0, 100), Color.White);
-        SpriteBatch.DrawString(DebugFont, (1f - Mode.LockDelayRatio).ToString(), new Vector2(0, 140), Color.White);
+        // SpriteBatch.DrawString(DebugFont,
+            // $"{Mode.DasCharge} {Mode.ArrCharge} {Mode.ActivePiece.Y} {Mode.ActivePiece.SubY} {Mode.LockDelayLeft}",
+            // Vector2.Zero, Color.White);
+        // SpriteBatch.DrawString(DebugFont, Mode.State.ToString(), new Vector2(0, 30), Color.White);
+        // SpriteBatch.DrawString(DebugFont, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
+        // SpriteBatch.DrawString(DebugFont, InputHandler.GetInputs().ToString(), new Vector2(0, 100), Color.White);
+        // SpriteBatch.DrawString(DebugFont, (1f - Mode.LockDelayRatio).ToString(), new Vector2(0, 140), Color.White);
         SpriteBatch.DrawString(DebugFont, $"lv{Mode.Level}", new Vector2(0, 400), Color.White);
 
         if (Mode.State == GamemodeState.Gameover)
