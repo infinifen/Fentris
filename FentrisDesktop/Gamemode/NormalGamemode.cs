@@ -5,6 +5,27 @@ namespace FentrisDesktop.Gamemode;
 
 public class NormalGamemode : Gamemode
 {
+    public override int Arr => 1;
+    public override int Das => 8;
+
+    public override int Gravity => Level switch
+    {
+        > 400 => 9999,
+        > 350 => 320,
+        > 320 => 200,
+        > 300 => 160,
+        > 250 => 120,
+        > 200 => 80,
+        > 140 => 64,
+        > 100 => 48,
+        > 80 => 32,
+        > 50 => 24,
+        > 40 => 20,
+        > 30 => 16,
+        > 20 => 12,
+        > 10 => 8,
+        _ => 4,
+    };
     public override string Id => "normal";
     
     public long Score = 0;
@@ -35,19 +56,22 @@ public class NormalGamemode : Gamemode
         var baseIncrement = Math.Pow(n, 1 + n * 0.2);
         Combo += n * (n * 0.5);
 
-        Score += (long) (148 * baseIncrement * Combo * Level / 8f);
+        Score += (long) (148 * baseIncrement * Combo * Level / 40f);
     }
 
     protected override void LockPiece()
     {
         Combo = Math.Max(1, Combo);
         base.LockPiece();
-        Console.WriteLine($"combo ={Combo} score = ${Score}");
     }
 
     public override void Frame(GamemodeInputs input)
     {
         Combo *= 0.999;
+        if (Level > 400)
+        {
+            State = GamemodeState.Gameover;
+        }
         base.Frame(input);
     }
 }

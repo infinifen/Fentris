@@ -11,6 +11,7 @@ public class GamemodeRegistry
     {
         { "base", (game, mode) => new GamemodeRenderer(game, mode) },
         { "normal", (game, mode) => new NormalRenderer(game, mode) },
+        { "apocalypse", (game, mode) => new ApocalypseRenderer(game, mode) }
     };
 
     public static RegistryReturn GetRendererForId(string id)

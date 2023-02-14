@@ -3,6 +3,7 @@ using FentrisDesktop.Board;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 
@@ -40,11 +41,12 @@ public class GamemodeRenderer : GameScreen
     {
         var inputs = InputHandler.GetInputs();
         
-        if (Mode.State == GamemodeState.Gameover && (inputs.RotateCw || inputs.RotateCcw))
+        if (Mode.State == GamemodeState.Gameover)
         {
-            Game.LoadMenu();
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                Game.LoadMenu();
         }
-        
+
         Mode.Frame(inputs);
         
         InputHandler.CycleInputStates();
@@ -63,6 +65,17 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.DrawString(DebugFont, InputHandler.GetInputs().ToString(), new Vector2(0, 100), Color.White);
         SpriteBatch.DrawString(DebugFont, (1f - Mode.LockDelayRatio).ToString(), new Vector2(0, 140), Color.White);
         SpriteBatch.DrawString(DebugFont, $"lv{Mode.Level}", new Vector2(0, 400), Color.White);
+
+        if (Mode.State == GamemodeState.Gameover)
+        {
+            SpriteBatch.DrawString(Game.MediumFont, "game over, press enter to go back to menu", new Vector2(0, Game.H - 40), Color.White);
+        }
+        
+        if (Mode.State == GamemodeState.Clear)
+        {
+            SpriteBatch.DrawString(Game.MediumFont, "Congratulations! press enter to go back to menu", new Vector2(0, Game.H - 40), Color.White);
+        }
+        
         SpriteBatch.End();
     }
 
@@ -144,17 +157,18 @@ public class GamemodeRenderer : GameScreen
 
     protected virtual void DrawNextQueue()
     {
-        int i = 0;
+        int i = Layout.BoardBorderThickness + 3*64;
+        int initialI = i;
         foreach (var shape in Mode.Next)
         {
-            var s = (int)(Layout.PreviewMinoSize * (i == 0 ? 1 : 1f / (Mode.NextAmount - 1f)));
+            var s = (int)(Layout.PreviewMinoSize * (i == initialI ? 1 : 1f / (Mode.NextAmount)));
             foreach (var (bx, by) in shape.BlockOffsets[0])
             {
                 DrawBlock(Mode.GetPieceKindForShape(shape), i + bx * s,
                     Layout.PreviewMargin + by * s, s);
             }
 
-            i += 5 * s;
+            i += 4 * s;
         }
     }
 
@@ -172,7 +186,7 @@ public class GamemodeRenderer : GameScreen
         blacked.A = Byte.MaxValue; // set up for the lerp because multiplying the alpha was never actually wanted
         var alpha = Color.Lerp(Color.Transparent, blacked, opacity);
         // SpriteBatch.FillRectangle(new Vector2(screenX, screenY), new Size2(size, size), alpha);
-        SpriteBatch.Draw(BlockTexture, new Vector2(screenX, screenY), alpha);
+        SpriteBatch.Draw(BlockTexture, new Rectangle(screenX + 64 - size, screenY + 64 - size,size, size), alpha);
     }
 
     public override void UnloadContent()
