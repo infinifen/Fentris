@@ -15,7 +15,7 @@ public class NormalRenderer : GamemodeRenderer
     protected override void DrawBorder()
     {
         SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
-            BoardRenderTarget.Height - Layout.BoardStartY, Color.Green, Layout.BoardBorderThickness);
+            BoardRenderTarget.Height - Layout.BoardStartY, Color.White, Layout.BoardBorderThickness);
     }
 
     public override void Draw(GameTime gameTime)

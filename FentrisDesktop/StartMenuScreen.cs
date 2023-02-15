@@ -17,9 +17,13 @@ public class StartMenuScreen : GameScreen
 {
     public static readonly MenuEntry[] Entries = new[]
     {
-        new MenuEntry("Normal mode", "The classic beginner experience",
+        new MenuEntry("Beginner Marathon", "Clear 100 lines as fast as you can!",
+            game => { game.LoadGamemode(new Gamemode.BeginnerMarathonGamemode()); },
+            new Color(0.1f, 0.8f, 0.2f, 1f)),
+        
+        new MenuEntry("Normal Score Attack", "Keep your multiplier high and score as high as possible in this 400-level mode!",
             game => { game.LoadGamemode(new Gamemode.NormalGamemode()); },
-            new Color(0.1f, 0.73f, 0.2f, 1f)),
+            new Color(0.5f, 0.4f, 0.73f, 1f)),
 
         new MenuEntry("Apocalypse", "Delay the descent into insanity.",
             game => { game.LoadGamemode(new ApocalypseGamemode()); },
