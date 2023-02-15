@@ -68,10 +68,10 @@ public class NormalGamemode : Gamemode
     public override void Frame(GamemodeInputs input)
     {
         Combo *= 0.999;
-        if (Level > 400 && State == GamemodeState.Are)
+        base.Frame(input);
+        if (Level >= 400 && State != GamemodeState.LineClear)
         {
             State = GamemodeState.Clear;
         }
-        base.Frame(input);
     }
 }
