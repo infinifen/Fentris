@@ -202,6 +202,7 @@ public class Gamemode
         {
             State = GamemodeState.Placement;
             OnStart();
+            OnPieceEnter(ref input);
         }
 
         if (State == GamemodeState.LineClear && SinceLastStateChange >= LineClearDelay)
