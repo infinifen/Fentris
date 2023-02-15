@@ -22,7 +22,7 @@ public class ApocalypseRenderer : GamemodeRenderer
     {
         base.Draw(gameTime);
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(((FentrisGame)Game).LargeFont, $"SPEED: {Mode.SpeedLv:F0}", new Vector2(0, 320), Color.Red);
+        SpriteBatch.DrawString(Game.LargeFont, $"SPEED: {Mode.SpeedLv:F0}", new Vector2(0, 320), Color.Red);
         SpriteBatch.End();
     }
 }

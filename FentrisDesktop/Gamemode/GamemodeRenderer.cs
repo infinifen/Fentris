@@ -11,7 +11,7 @@ namespace FentrisDesktop.Gamemode;
 
 public class GamemodeRenderer : GameScreen
 {
-    private new FentrisGame Game => (FentrisGame)base.Game;
+    protected new FentrisGame Game => (FentrisGame)base.Game;
     protected RenderTarget2D BoardRenderTarget;
     protected SpriteBatch SpriteBatch;
     protected FentrisDesktop.Gamemode.Gamemode Mode;
