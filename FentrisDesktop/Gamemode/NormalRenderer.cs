@@ -22,7 +22,7 @@ public class NormalRenderer : GamemodeRenderer
     {
         base.Draw(gameTime);
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(DebugFont, Mode.Combo.ToString(), new Vector2(0, 300), Color.Aqua);
+        SpriteBatch.DrawString(DebugFont, $"x{Mode.Combo:F2}", new Vector2(0, 300), Color.Aqua);
         SpriteBatch.DrawString(Game.LargeFont, Mode.Score.ToString(), new Vector2(0, 320), Color.Red);
         SpriteBatch.End();
     }
