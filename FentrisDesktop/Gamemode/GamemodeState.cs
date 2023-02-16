@@ -9,4 +9,5 @@ public enum GamemodeState
     LineClear,
     Gameover,
     Clear,
+    RollTransition,
 }

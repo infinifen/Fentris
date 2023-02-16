@@ -22,7 +22,8 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
     {
         base.Draw(gameTime);
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(Game.LargeFont, Mode.LinesCleared.ToString(), new Vector2(0, 320), Color.Red);
+        SpriteBatch.DrawString(Game.MediumFont, Mode.LinesCleared.ToString(), new Vector2(0, 320), Color.Red);
+        SpriteBatch.DrawString(Game.LargeFont, Mode.Score.ToString(), Vector2.Zero, Color.White);
         SpriteBatch.End();
     }
 }
