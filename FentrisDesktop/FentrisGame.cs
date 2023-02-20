@@ -1,5 +1,6 @@
 ﻿using System;
 using FentrisDesktop.Board;
+using FentrisDesktop.Config;
 using FentrisDesktop.Gamemode;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
@@ -20,6 +21,7 @@ public class FentrisGame : Game
     public DynamicSpriteFont LargeFont;
     public DynamicSpriteFont MediumFont;
     public DynamicSpriteFont SmallFont;
+    public KeyConfig KeyBinds;
 
     public int W => _graphics.PreferredBackBufferWidth;
     public int H => _graphics.PreferredBackBufferHeight;
@@ -39,6 +41,8 @@ public class FentrisGame : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        KeyBinds = KeyConfig.Default();
+        
         _screenManager = new ScreenManager();
         Components.Add(_screenManager);
 
@@ -101,9 +105,9 @@ public class FentrisGame : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+        // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+        //     Keyboard.GetState().IsKeyDown(Keys.Escape))
+        //     Exit();
 
         // TODO: Add your update logic here
         base.Update(gameTime);
@@ -116,5 +120,10 @@ public class FentrisGame : Game
         // TODO: Add your drawing code here
 
         base.Draw(gameTime);
+    }
+
+    public void LoadKeyConfig()
+    {
+        _screenManager.LoadScreen(new KeyConfigScreen(this));
     }
 }

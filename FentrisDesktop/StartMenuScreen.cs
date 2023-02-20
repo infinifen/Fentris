@@ -28,6 +28,11 @@ public class StartMenuScreen : GameScreen
         new MenuEntry("Apocalypse", "Delay the descent into insanity.",
             game => { game.LoadGamemode(new ApocalypseGamemode()); },
             new Color(0.82f, 0.23f, 0.1f, 1f)),
+        
+        new MenuEntry("Key bindings", "You can change your controls here.", game =>
+        {
+            game.LoadKeyConfig();
+        }, Color.Azure),
 
         new MenuEntry("Exit", "See you next time.", game => { game.Exit(); },
             new Color(1f, 1f, 1f, 1f))
