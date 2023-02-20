@@ -38,7 +38,7 @@ public class KeyConfigScreen : Screen
     {
         _game = game;
         keys = new List<Keys>(KeyConfig.KeyCount);
-        OnKeyPressed = (sender, args) => { Advance(args.Key); };
+        OnKeyPressed = (sender, args) => { Console.WriteLine("okp"); Advance(args.Key); };
         _kbListener.KeyPressed += OnKeyPressed;
     }
 

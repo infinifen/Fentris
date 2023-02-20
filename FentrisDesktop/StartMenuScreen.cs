@@ -68,18 +68,17 @@ public class StartMenuScreen : GameScreen
     public override void Update(GameTime gameTime)
     {
         var state = KeyboardExtended.GetState();
-
-        if (state.WasKeyJustUp(Keys.Down))
+        if (state.WasKeyJustUp(_game.KeyBinds.MenuDown))
         {
             _menuIdx++;
         }
 
-        if (state.WasKeyJustUp(Keys.Up))
+        if (state.WasKeyJustUp(_game.KeyBinds.MenuUp))
         {
             _menuIdx--;
         }
 
-        if (state.WasKeyJustUp(Keys.Enter))
+        if (state.WasKeyJustUp(_game.KeyBinds.Start))
         {
             CurrentMenuItem.Action(_game);
         }

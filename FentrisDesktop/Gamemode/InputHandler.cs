@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FentrisDesktop.Config;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace FentrisDesktop.Gamemode;
@@ -9,9 +10,11 @@ public class InputHandler
     private GamePadState _prevGamePadState;
     private DirectionInput _prevDirection = DirectionInput.Neutral;
     private DirectionInput _currentDirection = DirectionInput.Neutral;
+    private KeyConfig _binds;
 
-    public InputHandler()
+    public InputHandler(KeyConfig binds)
     {
+        _binds = binds;
         CycleInputStates();
     }
 
@@ -53,37 +56,37 @@ public class InputHandler
         
         // this logic can probably be much cleaner but i'm not doing that right now
 
-        if (KeyboardIsJustDown(Keys.Left))
+        if (KeyboardIsJustDown(_binds.Left))
         {
             _currentDirection = DirectionInput.Left; // latest key overrides
         }
 
-        if (KeyboardIsJustDown(Keys.Right))
+        if (KeyboardIsJustDown(_binds.Right))
         {
             _currentDirection = DirectionInput.Right; // latest key overrides
         }
 
-        if (KeyboardIsDown(Keys.Left) && !KeyboardIsDown(Keys.Right))
+        if (KeyboardIsDown(_binds.Left) && !KeyboardIsDown(_binds.Right))
         {
             _currentDirection = DirectionInput.Left; // both were held down and right was released
         }
         
-        if (KeyboardIsDown(Keys.Right) && !KeyboardIsDown(Keys.Left))
+        if (KeyboardIsDown(_binds.Right) && !KeyboardIsDown(_binds.Left))
         {
             _currentDirection = DirectionInput.Right; // both were held down and left was released
         }
 
-        if (!(KeyboardIsDown(Keys.Left) || KeyboardIsDown(Keys.Right)))
+        if (!(KeyboardIsDown(_binds.Left) || KeyboardIsDown(_binds.Right)))
         {
             _currentDirection = DirectionInput.Neutral; // neither is pressed, so go neutral
         }
         
-        result.SonicDrop = KeyboardIsDown(Keys.Space);
-        result.SoftDrop = KeyboardIsDown(Keys.Down);
-        result.RotateCw = KeyboardIsJustDown(Keys.Up) || KeyboardIsJustDown(Keys.X);
-        result.RotateCcw = KeyboardIsJustDown(Keys.Z);
-        result.IrsCw = KeyboardIsDown(Keys.Up) || KeyboardIsDown(Keys.X);
-        result.IrsCcw = KeyboardIsDown(Keys.Z);
+        result.SonicDrop = KeyboardIsDown(_binds.Sonic);
+        result.SoftDrop = KeyboardIsDown(_binds.Soft);
+        result.RotateCw = KeyboardIsJustDown(_binds.RotateCw) || KeyboardIsJustDown(_binds.SecondaryRotateCw);
+        result.RotateCcw = KeyboardIsJustDown(_binds.RotateCcw) || KeyboardIsJustDown(_binds.SecondaryRotateCcw);
+        result.IrsCw = KeyboardIsDown(_binds.RotateCw) || KeyboardIsDown(_binds.SecondaryRotateCw);
+        result.IrsCcw = KeyboardIsDown(_binds.RotateCcw) || KeyboardIsDown(_binds.SecondaryRotateCcw);
         result.Direction = _currentDirection;
         result.PreviousDirection = _prevDirection;
 

@@ -27,7 +27,7 @@ public class GamemodeRenderer : GameScreen
             new RenderTarget2D(game.GraphicsDevice, 640 + Layout.BoardBorderThickness * 2,
                 1280 + Layout.BoardBorderThickness * 2 + Layout.PreviewHeight,
                 false, SurfaceFormat.Alpha8, DepthFormat.None);
-        InputHandler = new InputHandler();
+        InputHandler = new InputHandler(game.KeyBinds);
     }
 
     public override void LoadContent()
