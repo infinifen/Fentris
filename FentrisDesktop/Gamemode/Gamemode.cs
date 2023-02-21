@@ -227,7 +227,7 @@ public class Gamemode
             Console.WriteLine($"afterIrs {input}");
         }
 
-        if (State == GamemodeState.Gameover)
+        if (State == GamemodeState.Gameover || State == GamemodeState.Clear)
         {
             return;
         }

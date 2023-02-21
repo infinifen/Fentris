@@ -41,10 +41,10 @@ public class GamemodeRenderer : GameScreen
     {
         var inputs = InputHandler.GetInputs();
         
-        if (Mode.State == GamemodeState.Gameover)
+        if ((Mode.State.IsFinished() && Keyboard.GetState().IsKeyDown(Game.KeyBinds.Start)) ||
+            Keyboard.GetState().IsKeyDown(Game.KeyBinds.Back))
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-                Game.LoadMenu();
+            Game.LoadMenu();
         }
 
         Mode.Frame(inputs);

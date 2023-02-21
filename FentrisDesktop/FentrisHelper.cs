@@ -1,4 +1,5 @@
 ﻿using FentrisDesktop.Board;
+using FentrisDesktop.Gamemode;
 using Microsoft.Xna.Framework;
 
 namespace FentrisDesktop;
@@ -26,5 +27,10 @@ public static class FentrisHelper
             BlockKind.OutOfBounds => Microsoft.Xna.Framework.Color.Transparent,
             _ => Microsoft.Xna.Framework.Color.Transparent
         };
+    }
+
+    public static bool IsFinished(this GamemodeState state)
+    {
+        return state is GamemodeState.Clear or GamemodeState.Gameover;
     }
 }
