@@ -77,6 +77,23 @@ public class NormalGamemode : Gamemode
     
     public override void SaveRecord(FentrisHighscores highscores)
     {
-        highscores.ScoreAttackScore = Math.Max(highscores.ScoreAttackScore, Score);
+        if (Score > highscores.Normal.Score)
+        {
+            highscores.Normal = new Result
+            {
+                Frames = LastStateChangeFrame,
+                Level = Level,
+                Lines = LinesCleared,
+                Score = Score
+            };
+        }
+    }
+    
+    public class Result
+    {
+        public int Level { get; set; }
+        public long Score { get; set; }
+        public int Lines { get; set; }
+        public int Frames { get; set; }
     }
 }

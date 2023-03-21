@@ -115,6 +115,23 @@ public class BeginnerMarathonGamemode : Gamemode
     {
         Console.WriteLine(highscores);
         Console.WriteLine(Score);
-        highscores.BeginnerScore = Math.Max(highscores.BeginnerScore, Score);
+        if (Score > highscores.Beginner.Score)
+        {
+            highscores.Beginner = new Result
+            {
+                Frames = LastStateChangeFrame,
+                Level = Level,
+                Lines = LinesCleared,
+                Score = Score
+            };
+        }
+    }
+    
+    public class Result
+    {
+        public int Level { get; set; }
+        public int Score { get; set; }
+        public int Lines { get; set; }
+        public int Frames { get; set; }
     }
 }

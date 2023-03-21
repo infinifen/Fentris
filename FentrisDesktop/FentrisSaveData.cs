@@ -1,4 +1,6 @@
-﻿using FentrisDesktop.Config;
+﻿using System;
+using FentrisDesktop.Config;
+using FentrisDesktop.Gamemode;
 
 namespace FentrisDesktop;
 
@@ -14,9 +16,26 @@ public class FentrisSaveData
         {
             Highscores = new FentrisHighscores
             {
-                ApocalypseLevel = -2,
-                ScoreAttackScore = -2,
-                BeginnerScore = -2
+                Beginner = new BeginnerMarathonGamemode.Result
+                {
+                    Frames = 0,
+                    Level = 0,
+                    Lines = 0,
+                    Score = 0,
+                },
+                Normal = new NormalGamemode.Result
+                {
+                    Frames = 0,
+                    Level = 0,
+                    Lines = 0,
+                    Score = 0,
+                },
+                Apocalypse = new ApocalypseGamemode.Result
+                {
+                    Frames = 0,
+                    Level = 0,
+                    Lines = 0,
+                }
             },
             Keybinds = KeyConfig.Default(),
             Mastery = 0,
@@ -31,12 +50,12 @@ public class FentrisSaveData
 
 public class FentrisHighscores
 {
-    public long BeginnerScore { get; set; }
-    public long ScoreAttackScore { get; set; }
-    public int ApocalypseLevel { get; set; }
+    public BeginnerMarathonGamemode.Result Beginner { get; set; }
+    public NormalGamemode.Result Normal { get; set; }
+    public ApocalypseGamemode.Result Apocalypse { get; set; }
 
     public override string ToString()
     {
-        return $"BeginnerScore: {BeginnerScore}, ScoreAttackScore: {ScoreAttackScore}, ApocalypseLevel: {ApocalypseLevel}";
+        return $"BeginnerScore: {Beginner.Score}, ScoreAttackScore: {Normal.Score}, ApocalypseLevel: {Apocalypse.Level}";
     }
 }

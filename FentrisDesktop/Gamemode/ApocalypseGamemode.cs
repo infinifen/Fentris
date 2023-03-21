@@ -57,6 +57,21 @@ public class ApocalypseGamemode : Gamemode
 
     public override void SaveRecord(FentrisHighscores highscores)
     {
-        highscores.ApocalypseLevel = Math.Max(highscores.ApocalypseLevel, Level);
+        if (Level > highscores.Apocalypse.Level)
+        {
+            highscores.Apocalypse = new Result
+            {
+                Frames = LastStateChangeFrame,
+                Level = Level,
+                Lines = LinesCleared
+            };
+        }
+    }
+
+    public class Result
+    {
+        public int Level { get; set; }
+        public int Frames { get; set; }
+        public int Lines { get; set; }
     }
 }
