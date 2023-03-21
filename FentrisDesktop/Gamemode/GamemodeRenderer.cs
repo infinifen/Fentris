@@ -61,6 +61,7 @@ public class GamemodeRenderer : GameScreen
     public override void Draw(GameTime gameTime)
     {
         DrawBoard();
+        DrawScoring();
 
         SpriteBatch.Begin();
         // SpriteBatch.DrawString(DebugFont,
@@ -195,6 +196,11 @@ public class GamemodeRenderer : GameScreen
         SpriteBatch.Draw(BlockTexture, new Rectangle(screenX + 64 - size, screenY + 64 - size,size, size), alpha);
     }
 
+    protected virtual void DrawScoring()
+    {
+        
+    }
+    
     public override void UnloadContent()
     {
         Console.WriteLine("unloadContent");
