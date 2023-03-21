@@ -14,8 +14,9 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
     
     protected override void DrawBorder()
     {
+        var borderColor = Mode.IsInRoll ? Color.Gold : Color.Green;
         SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
-            BoardRenderTarget.Height - Layout.BoardStartY, Color.Green, Layout.BoardBorderThickness);
+            BoardRenderTarget.Height - Layout.BoardStartY, borderColor, Layout.BoardBorderThickness);
     }
 
     public override void Draw(GameTime gameTime)
