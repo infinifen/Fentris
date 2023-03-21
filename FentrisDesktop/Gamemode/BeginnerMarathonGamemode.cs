@@ -110,4 +110,11 @@ public class BeginnerMarathonGamemode : Gamemode
         base.OnPieceEnter(ref input);
         _lcd = 20;
     }
+    
+    public override void SaveRecord(FentrisHighscores highscores)
+    {
+        Console.WriteLine(highscores);
+        Console.WriteLine(Score);
+        highscores.BeginnerScore = Math.Max(highscores.BeginnerScore, Score);
+    }
 }

@@ -12,7 +12,7 @@ public class ApocalypseGamemode : Gamemode
 
     public override int Arr => 1;
     public override int Are => (int)Math.Clamp(LockDelay * 1.4, 5, 20);
-    public override int LineAre => Are - 5;
+    public override int LineAre => Are - 4;
     public override int LineClearDelay => 5;
     public override int LockDelay => (int)SpeedLv switch
     {
@@ -31,8 +31,12 @@ public class ApocalypseGamemode : Gamemode
         >= 500 => 18,
         >= 400 => 21,
         >= 300 => 25,
+        >= 250 => 27,
         >= 200 => 30,
+        >= 150 => 35,
         >= 100 => 40,
+        >= 75 => 45,
+        >= 50 => 50,
         _ => 60,
     };
 
@@ -49,5 +53,10 @@ public class ApocalypseGamemode : Gamemode
             _ => 0.8
         };
         Console.WriteLine($"speed: {SpeedLv}");
+    }
+
+    public override void SaveRecord(FentrisHighscores highscores)
+    {
+        highscores.ApocalypseLevel = Math.Max(highscores.ApocalypseLevel, Level);
     }
 }

@@ -22,11 +22,13 @@ public class KeyConfigScreen : Screen
     public DynamicSpriteFont SmallFont => _game.SmallFont;
     private readonly KeyboardListener _kbListener = new KeyboardListener();
     private List<Keys> keys;
+
     private string[] keyNames = new[]
     {
         "Start", "Back", "Menu Up", "Menu Down", "Left", "Right", "Sonic Drop",
         "Soft Drop", "Rotate Right", "Secondary Rotate Right", "Rotate Left", "Secondary Rotate Left"
     };
+
     private bool Finished => keys.Count >= KeyConfig.KeyCount;
     private bool firstInputIgnored = false;
 
@@ -34,11 +36,17 @@ public class KeyConfigScreen : Screen
     private SpriteBatch _spriteBatch;
 
 
-    public KeyConfigScreen(FentrisGame game)
+    public KeyConfigScreen(FentrisGame game, bool ignoreFirstInput = true)
     {
         _game = game;
+        // if ignoreFirstInput is false, this will just pretend the input was already ignored
+        firstInputIgnored = !ignoreFirstInput;
         keys = new List<Keys>(KeyConfig.KeyCount);
-        OnKeyPressed = (sender, args) => { Console.WriteLine("okp"); Advance(args.Key); };
+        OnKeyPressed = (sender, args) =>
+        {
+            Console.WriteLine("okp");
+            Advance(args.Key);
+        };
         _kbListener.KeyPressed += OnKeyPressed;
     }
 
@@ -59,6 +67,7 @@ public class KeyConfigScreen : Screen
             firstInputIgnored = true;
             return;
         }
+
         if (Finished)
         {
             if (key != Keys.Escape)
@@ -66,6 +75,7 @@ public class KeyConfigScreen : Screen
                 _game.KeyBinds = new KeyConfig(keys[0], keys[1], keys[2], keys[3], keys[4],
                     keys[5], keys[6], keys[7], keys[8], keys[9],
                     keys[10], keys[11]);
+                _game.WriteSave();
                 _game.LoadMenu();
             }
             else
@@ -90,7 +100,11 @@ public class KeyConfigScreen : Screen
         _spriteBatch.FillRectangle(0, 0, _game.W, _game.H, Color.Black);
         if (!Finished)
         {
-            _spriteBatch.DrawString(LargeFont, $"press key for {keyNames[keys.Count]}", new Vector2(0, 0), Color.White);
+            var topTextSize = LargeFont.MeasureString("Key Config");
+            _spriteBatch.DrawString(LargeFont, $"press key for {keyNames[keys.Count]}",
+                new Vector2(_game.W * 0.08f, (_game.H - topTextSize.Y) / 2f), Color.White);
+            _spriteBatch.DrawString(LargeFont, "Key Config", new Vector2((_game.W - topTextSize.X) / 2f, 0),
+                Color.White);
         }
         else
         {
@@ -104,8 +118,8 @@ public class KeyConfigScreen : Screen
             };
             rtl.Draw(_spriteBatch, new Vector2(0, 0), Color.White);
         }
-        _spriteBatch.End();
 
+        _spriteBatch.End();
     }
 
     public override void Dispose()

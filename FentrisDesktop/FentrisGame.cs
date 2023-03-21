@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text.Json;
 using FentrisDesktop.Board;
 using FentrisDesktop.Config;
 using FentrisDesktop.Gamemode;
@@ -21,7 +23,14 @@ public class FentrisGame : Game
     public DynamicSpriteFont LargeFont;
     public DynamicSpriteFont MediumFont;
     public DynamicSpriteFont SmallFont;
-    public KeyConfig KeyBinds;
+
+    public KeyConfig KeyBinds
+    {
+        get => SaveData.Keybinds;
+        set => SaveData.Keybinds = value;
+    }
+
+    public FentrisSaveData SaveData = FentrisSaveData.Default();
 
     public int W => _graphics.PreferredBackBufferWidth;
     public int H => _graphics.PreferredBackBufferHeight;
@@ -65,9 +74,41 @@ public class FentrisGame : Game
 
         base.Initialize();
         ReloadFonts();
-        // _screenManager.LoadScreen(new GamemodeRenderer(this, new Gamemode.ApocalypseGamemode()), new FadeTransition(GraphicsDevice, Color.Black));
-        _screenManager.LoadScreen(new StartMenuScreen(this), new FadeTransition(GraphicsDevice, Color.Black));
-        // LoadMenu();
+
+        var loadNext = LoadSave();
+        Console.WriteLine(SaveData);
+
+        _screenManager.LoadScreen(loadNext, new FadeTransition(GraphicsDevice, Color.Black));
+    }
+
+    private Screen LoadSave()
+    {
+        try
+        {
+            var saveString = File.ReadAllText("Fentris.sav");
+            var save = JsonSerializer.Deserialize<FentrisSaveData>(saveString);
+            SaveData = save;
+            return new StartMenuScreen(this);
+        }
+        catch
+        {
+            //todo: elaborate on this a bit more except of catching everything
+            SaveData = FentrisSaveData.Default();
+            return new KeyConfigScreen(this, false);
+        }
+    }
+
+    public void WriteSave()
+    {
+        try
+        {
+            var serialized = JsonSerializer.Serialize(SaveData);
+            File.WriteAllText("Fentris.sav", serialized);
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"Couldn't write save: {e.Message}");
+        }
     }
 
     protected override void LoadContent()

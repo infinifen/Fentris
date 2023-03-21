@@ -74,4 +74,9 @@ public class NormalGamemode : Gamemode
             State = GamemodeState.Clear;
         }
     }
+    
+    public override void SaveRecord(FentrisHighscores highscores)
+    {
+        highscores.ScoreAttackScore = Math.Max(highscores.ScoreAttackScore, Score);
+    }
 }

@@ -312,6 +312,10 @@ public class Gamemode
         }
     }
 
+    public virtual void SaveRecord(FentrisHighscores highscores)
+    {
+    }
+
     public virtual void OnLineClearEnd()
     {
         foreach (var row in Board.FullRows())

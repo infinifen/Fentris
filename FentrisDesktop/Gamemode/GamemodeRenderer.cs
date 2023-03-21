@@ -44,6 +44,12 @@ public class GamemodeRenderer : GameScreen
         if ((Mode.State.IsFinished() && Keyboard.GetState().IsKeyDown(Game.KeyBinds.Start)) ||
             Keyboard.GetState().IsKeyDown(Game.KeyBinds.Back))
         {
+            if (Mode.State.IsFinished())
+            {
+                Console.WriteLine(Game.SaveData.Highscores == null);
+                Mode.SaveRecord(Game.SaveData.Highscores);
+                Game.WriteSave();
+            }
             Game.LoadMenu();
         }
 
