@@ -39,7 +39,7 @@ public class NormalGamemode : Gamemode
 
     protected override void OnNoLineClear()
     {
-        Combo *= 0.98;
+        Combo *= 0.99;
     }
 
     protected override void OnLineClear(List<int> full)
@@ -54,9 +54,9 @@ public class NormalGamemode : Gamemode
         };
         var n = CurrentFullRows.Count;
         var baseIncrement = Math.Pow(n, 1 + n * 0.2);
-        Combo += n * (n * 0.5);
+        Combo += n * (n * 0.5 * (1 + Level / 200f));
 
-        Score += (long) (148 * baseIncrement * Combo * Level / 40f);
+        Score += (long) (148 * baseIncrement * Combo);
     }
 
     protected override void LockPiece()
@@ -67,7 +67,7 @@ public class NormalGamemode : Gamemode
 
     public override void Frame(GamemodeInputs input)
     {
-        Combo *= 0.999;
+        Combo *= 0.9996;
         base.Frame(input);
         if (Level >= 400 && State != GamemodeState.LineClear)
         {
