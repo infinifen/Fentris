@@ -71,7 +71,6 @@ public class GamemodeRenderer : GameScreen
         // SpriteBatch.DrawString(DebugFont, Mode.ActivePieceTouchingStack().ToString(), new Vector2(0, 60), Color.White);
         // SpriteBatch.DrawString(DebugFont, InputHandler.GetInputs().ToString(), new Vector2(0, 100), Color.White);
         // SpriteBatch.DrawString(DebugFont, (1f - Mode.LockDelayRatio).ToString(), new Vector2(0, 140), Color.White);
-        SpriteBatch.DrawString(DebugFont, $"lv{Mode.Level}", new Vector2(0, 400), Color.White);
 
         if (Mode.State == GamemodeState.Gameover)
         {
@@ -198,7 +197,9 @@ public class GamemodeRenderer : GameScreen
 
     protected virtual void DrawScoring()
     {
-        
+        SpriteBatch.Begin();
+        SpriteBatch.DrawString(DebugFont, $"lv{Mode.Level}", new Vector2(0, 400), Color.White);
+        SpriteBatch.End();
     }
     
     public override void UnloadContent()
