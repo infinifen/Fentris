@@ -47,10 +47,10 @@ public class ApocalypseGamemode : Gamemode
         SpeedLv *= CurrentFullRows.Count switch
         {
             0 => 1,
-            1 => 1,
-            2 => 0.98,
-            3 => 0.91,
-            _ => 0.8
+            1 => 0.995,
+            2 => 0.97,
+            3 => 0.9,
+            _ => 0.78
         };
         Console.WriteLine($"speed: {SpeedLv}");
     }
