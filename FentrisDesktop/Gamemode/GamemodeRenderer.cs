@@ -203,7 +203,16 @@ public class GamemodeRenderer : GameScreen
     protected virtual void DrawScoring()
     {
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(DebugFont, $"lv{Mode.Level}", new Vector2(0, 400), Color.White);
+        var boardRect = CalculateBoardRect();
+        var levelInfo = "Level";
+        var LevelStr = Mode.Level.ToString();
+
+        (var levelPos, var levelInfoPos) = FentrisHelper.GetScoringLayout(
+            boardRect, 0.8f, 10, 10, levelInfo, Game.MediumFont, LevelStr, Game.LargeFont
+        );
+
+        SpriteBatch.DrawString(Game.LargeFont, LevelStr, levelPos, Color.AliceBlue);
+        SpriteBatch.DrawString(Game.MediumFont, levelInfo, levelInfoPos, Color.White);
         SpriteBatch.End();
     }
     
