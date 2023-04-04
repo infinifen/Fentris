@@ -22,9 +22,30 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
     public override void Draw(GameTime gameTime)
     {
         base.Draw(gameTime);
+    }
+    
+
+    protected override void DrawScoring()
+    {
         SpriteBatch.Begin();
-        SpriteBatch.DrawString(Game.MediumFont, Mode.LinesCleared.ToString(), new Vector2(0, 320), Color.Red);
-        SpriteBatch.DrawString(Game.LargeFont, Mode.Score.ToString(), Vector2.Zero, Color.White);
+        var boardRect = CalculateBoardRect();
+        var lineCountInfo = "Lines";
+        var lineCountStr = Mode.LinesCleared.ToString();
+        var scoreInfo = "Score";
+        var scoreStr = Mode.Score.ToString();
+
+        (var lineCountPos, var lineCountInfoPos) = FentrisHelper.GetScoringLayout(
+            boardRect, 0.6f, 10, 10, lineCountInfo, Game.MediumFont, lineCountStr, Game.LargeFont
+        );
+        
+        (var scorePos, var scoreInfoPos) = FentrisHelper.GetScoringLayout(
+            boardRect, 0.8f, 10, 10, scoreInfo, Game.MediumFont, scoreStr, Game.LargeFont
+        );
+
+        SpriteBatch.DrawString(Game.LargeFont, lineCountStr, lineCountPos, Color.AliceBlue);
+        SpriteBatch.DrawString(Game.LargeFont, scoreStr, scorePos, Color.White);
+        SpriteBatch.DrawString(Game.MediumFont, scoreInfo, scoreInfoPos, Color.White);
+        SpriteBatch.DrawString(Game.MediumFont, lineCountInfo, lineCountInfoPos, Color.White);
         SpriteBatch.End();
     }
 }

@@ -99,14 +99,19 @@ public class GamemodeRenderer : GameScreen
         }
     }
 
-    protected virtual void DrawBoard()
+    protected virtual Rectangle CalculateBoardRect()
     {
         var boardH = Game.H - Layout.Margin * 2;
         var boardW = (int)(boardH / ((float)BoardRenderTarget.Height / BoardRenderTarget.Width));
 
         var rx = Game.W / 2 - boardW / 2;
         var ry = Layout.Margin;
-
+        return new Rectangle(rx, ry, boardW, boardH);
+    }
+    
+    protected virtual void DrawBoard()
+    {
+        var rect = CalculateBoardRect();
         Game.GraphicsDevice.SetRenderTarget(BoardRenderTarget);
         Game.GraphicsDevice.Clear(Color.Transparent);
 
@@ -151,7 +156,7 @@ public class GamemodeRenderer : GameScreen
 
         // draw board to screen
         SpriteBatch.Begin();
-        SpriteBatch.Draw(BoardRenderTarget, new Rectangle(rx, ry, boardW, boardH), Color.White);
+        SpriteBatch.Draw(BoardRenderTarget, rect, Color.White);
         SpriteBatch.End();
     }
 
