@@ -43,14 +43,14 @@ public class ApocalypseGamemode : Gamemode
     protected override void LockPiece()
     {
         base.LockPiece();
-        SpeedLv += 4;
+        SpeedLv += 4 + 0.5 * (Level / 100);
         SpeedLv *= CurrentFullRows.Count switch
         {
             0 => 1,
-            1 => 0.995,
-            2 => 0.97,
-            3 => 0.9,
-            _ => 0.78
+            1 => 0.99,
+            2 => 0.96,
+            3 => 0.88,
+            _ => 0.75
         };
         Console.WriteLine($"speed: {SpeedLv}");
     }
