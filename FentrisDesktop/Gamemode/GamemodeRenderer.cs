@@ -211,7 +211,7 @@ public class GamemodeRenderer : GameScreen
             boardRect, 0.8f, 10, 10, levelInfo, Game.MediumFont, LevelStr, Game.LargeFont
         );
 
-        SpriteBatch.DrawString(Game.LargeFont, LevelStr, levelPos, Color.AliceBlue);
+        SpriteBatch.DrawString(Game.LargeFont, LevelStr, levelPos, Color.White);
         SpriteBatch.DrawString(Game.MediumFont, levelInfo, levelInfoPos, Color.White);
         SpriteBatch.End();
     }

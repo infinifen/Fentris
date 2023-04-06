@@ -42,7 +42,7 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
             boardRect, 0.8f, 10, 10, scoreInfo, Game.MediumFont, scoreStr, Game.LargeFont
         );
 
-        SpriteBatch.DrawString(Game.LargeFont, lineCountStr, lineCountPos, Color.AliceBlue);
+        SpriteBatch.DrawString(Game.LargeFont, lineCountStr, lineCountPos, Color.White);
         SpriteBatch.DrawString(Game.LargeFont, scoreStr, scorePos, Color.White);
         SpriteBatch.DrawString(Game.MediumFont, scoreInfo, scoreInfoPos, Color.White);
         SpriteBatch.DrawString(Game.MediumFont, lineCountInfo, lineCountInfoPos, Color.White);
