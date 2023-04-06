@@ -83,7 +83,7 @@ public class Gamemode
         OnNewPiece();
     }
 
-    public BlockKind GetPieceKindForShape(PieceShape shape)
+    public virtual BlockKind GetPieceKindForShape(PieceShape shape)
     {
         if (shape.Equals(Tetrominoes.I))
         {
