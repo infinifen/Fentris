@@ -1,4 +1,5 @@
-﻿using FentrisDesktop.Board;
+﻿using System;
+using FentrisDesktop.Board;
 using FentrisDesktop.Gamemode;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
@@ -49,5 +50,12 @@ public static class FentrisHelper
         var valuePos = infoPos + new Vector2(0, infoSize.Y / 2f + marginY + valueSize.Y / 2f);
 
         return (infoPos, valuePos);
+    }
+    
+    public static (int m, int s, int cs) FramesToTime(int frames)
+    {
+        (var minutes, var rest) = Math.DivRem(frames, 60 * 60);
+        (var seconds, var restFrames) = Math.DivRem(rest, 60);
+        return (minutes, seconds, (int)Math.Round(restFrames / 60d * 100d));
     }
 }
