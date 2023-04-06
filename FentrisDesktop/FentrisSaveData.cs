@@ -35,6 +35,12 @@ public class FentrisSaveData
                     Frames = 0,
                     Level = 0,
                     Lines = 0,
+                },
+                Ferocity = new FerocityGamemode.Result
+                {
+                    Frames = 0,
+                    Level = 0,
+                    Lines = 0,
                 }
             },
             Keybinds = KeyConfig.Default(),
@@ -53,6 +59,7 @@ public class FentrisHighscores
     public BeginnerMarathonGamemode.Result Beginner { get; set; }
     public NormalGamemode.Result Normal { get; set; }
     public ApocalypseGamemode.Result Apocalypse { get; set; }
+    public FerocityGamemode.Result Ferocity { get; set; }
 
     public override string ToString()
     {
