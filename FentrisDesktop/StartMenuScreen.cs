@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using FentrisDesktop.Gamemode;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
@@ -29,6 +32,11 @@ public class StartMenuScreen : GameScreen
             game => { game.LoadGamemode(new ApocalypseGamemode()); },
             new Color(0.82f, 0.23f, 0.1f, 1f)),
         
+        new MenuEntry("Ferocity", "Say goodbye to the serene.",
+            game => game.SaveData.Highscores.Apocalypse.Level > 200, 
+            game => { game.LoadGamemode(new FerocityGamemode()); },
+            new Color(0.2f, 0.2f, 0.2f, 1f)),
+        
         new MenuEntry("Key bindings", "You can change your controls here.", game =>
         {
             game.LoadKeyConfig();
@@ -37,9 +45,10 @@ public class StartMenuScreen : GameScreen
         new MenuEntry("Exit", "See you next time.", game => { game.Exit(); },
             new Color(1f, 1f, 1f, 1f))
     };
-
+    
+    private readonly MenuEntry[] _unlockedEntries;
     private int _menuIdx = 0;
-    private MenuEntry CurrentMenuItem => Entries[Mod(_menuIdx, Entries.Length)];
+    private MenuEntry CurrentMenuItem => _unlockedEntries[Mod(_menuIdx, Entries.Length)];
     private int CurrentMenuIdx => Mod(_menuIdx, Entries.Length);
     private FentrisGame _game;
     private SpriteBatch _spriteBatch;
@@ -49,6 +58,7 @@ public class StartMenuScreen : GameScreen
     public StartMenuScreen(FentrisGame game) : base(game)
     {
         this._game = game;
+        _unlockedEntries = Entries.Where(me => me.IsUnlocked(game)).ToArray();
     }
 
     public override void LoadContent()
@@ -97,9 +107,9 @@ public class StartMenuScreen : GameScreen
 
         _spriteBatch.Begin();
         var y = _game.H * 0.4f;
-        for (int i = 0; i < Entries.Length; i++)
+        for (int i = 0; i < _unlockedEntries.Length; i++)
         {
-            var item = Entries[i];
+            var item = _unlockedEntries[i];
             var measure = _game.LargeFont.MeasureString(item.Title);
             var x = _game.W / 2.0f - measure.X / 2.0f;
             var color = i == CurrentMenuIdx ? Color.Yellow : Color.White;
@@ -137,6 +147,7 @@ public struct MenuEntry
 
     public string Title;
     public string Tagline;
+    public Func<FentrisGame, bool> IsUnlocked;
     public MenuAction Action;
     public Color Tint;
 
@@ -144,6 +155,16 @@ public struct MenuEntry
     {
         Title = title;
         Tagline = tagline;
+        Action = action;
+        Tint = tint;
+        IsUnlocked = (_) => true;
+    }
+
+    public MenuEntry(string title, string tagline, Func<FentrisGame, bool> isUnlocked, MenuAction action, Color tint)
+    {
+        Title = title;
+        Tagline = tagline;
+        IsUnlocked = isUnlocked;
         Action = action;
         Tint = tint;
     }
