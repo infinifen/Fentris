@@ -15,6 +15,7 @@ public class Gamemode
     public readonly int NextAmount;
     public virtual int StartupDuration => 120;
     public int StartupLeft => Math.Max(0, StartupDuration - FrameCount);
+    public int GameplayFrames => Math.Max(0, FrameCount - StartupDuration);
 
     public virtual int Gravity => 4; // gravity ticks per frame
     public virtual int Das => 10;
