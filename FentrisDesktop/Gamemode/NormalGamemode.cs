@@ -81,7 +81,7 @@ public class NormalGamemode : Gamemode
         {
             highscores.Normal = new Result
             {
-                Frames = LastStateChangeFrame,
+                Frames = GameplayFrames,
                 Level = Level,
                 Lines = LinesCleared,
                 Score = Score

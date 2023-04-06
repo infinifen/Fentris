@@ -61,7 +61,7 @@ public class ApocalypseGamemode : Gamemode
         {
             highscores.Apocalypse = new Result
             {
-                Frames = LastStateChangeFrame,
+                Frames = GameplayFrames,
                 Level = Level,
                 Lines = LinesCleared
             };

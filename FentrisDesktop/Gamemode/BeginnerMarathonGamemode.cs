@@ -119,7 +119,7 @@ public class BeginnerMarathonGamemode : Gamemode
         {
             highscores.Beginner = new Result
             {
-                Frames = LastStateChangeFrame,
+                Frames = GameplayFrames,
                 Level = Level,
                 Lines = LinesCleared,
                 Score = Score
