@@ -53,9 +53,9 @@ public class NormalGamemode : Gamemode
             _ => 5
         };
         var n = CurrentFullRows.Count;
-        var baseIncrement = Math.Pow(n, 1 + n * 0.2);
-        Combo += n * (n * 0.5 * (1 + Level / 200f));
+        var baseIncrement = n + 0.5 * Math.Pow(n, 1 + n * 0.2);
 
+        Combo += n * (n * 0.5 * (1 + Level / 200f));
         Score += (long) (148 * baseIncrement * Combo);
     }
 
