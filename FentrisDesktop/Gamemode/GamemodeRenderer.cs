@@ -1,5 +1,6 @@
 ﻿using System;
 using FentrisDesktop.Board;
+using FentrisDesktop.Easing;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -53,9 +54,19 @@ public class GamemodeRenderer : GameScreen
             Game.LoadMenu();
         }
 
+        BeforeFrame(gameTime);
         Mode.Frame(inputs);
+        AfterFrame(gameTime);
         
         InputHandler.CycleInputStates();
+    }
+
+    protected virtual void BeforeFrame(GameTime gameTime)
+    {
+    }
+    
+    protected virtual void AfterFrame(GameTime gameTime)
+    {
     }
 
     public override void Draw(GameTime gameTime)
