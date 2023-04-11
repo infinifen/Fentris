@@ -1,4 +1,6 @@
-﻿using FontStashSharp;
+﻿using System;
+using FentrisDesktop.Easing;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
@@ -6,12 +8,13 @@ namespace FentrisDesktop.Gamemode;
 
 public class BeginnerMarathonRenderer : GamemodeRenderer
 {
+    protected EasingCounter ScoreEasingCounter = new(x => 0.3 / (1 + Math.Pow(Math.E, -x)), timeScale: 8);
     private new BeginnerMarathonGamemode Mode;
     public BeginnerMarathonRenderer(FentrisGame game, Gamemode mode) : base(game, mode)
     {
         Mode = (BeginnerMarathonGamemode)mode;
     }
-    
+
     protected override void DrawBorder()
     {
         var borderColor = Mode.IsInRoll ? Color.Gold : Color.Green;
@@ -24,6 +27,12 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
         base.Draw(gameTime);
     }
     
+    protected override void AfterFrame(GameTime gameTime)
+    {
+        ScoreEasingCounter.Goal = Mode.Score;
+        ScoreEasingCounter.Update(gameTime);
+    }
+    
 
     protected override void DrawScoring()
     {
@@ -32,7 +41,7 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
         var lineCountInfo = "Lines";
         var lineCountStr = Mode.LinesCleared.ToString();
         var scoreInfo = "Score";
-        var scoreStr = Mode.Score.ToString();
+        var scoreStr = $"{ScoreEasingCounter.Value:F0}";
 
         (var lineCountPos, var lineCountInfoPos) = FentrisHelper.GetScoringLayout(
             boardRect, 0.6f, 10, 10, lineCountInfo, Game.MediumFont, lineCountStr, Game.LargeFont
