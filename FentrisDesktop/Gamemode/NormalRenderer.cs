@@ -1,4 +1,6 @@
-﻿using FontStashSharp;
+﻿using System;
+using FentrisDesktop.Easing;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
@@ -6,6 +8,8 @@ namespace FentrisDesktop.Gamemode;
 
 public class NormalRenderer : GamemodeRenderer
 {
+    protected EasingCounter ScoreEasingCounter = new(x => 0.2 / (1 + Math.Pow(Math.E, -x)), timeScale: 8);
+
     private new NormalGamemode Mode;
     public NormalRenderer(FentrisGame game, Gamemode mode) : base(game, mode)
     {
@@ -23,6 +27,12 @@ public class NormalRenderer : GamemodeRenderer
         base.Draw(gameTime);
     }
 
+    protected override void AfterFrame(GameTime gameTime)
+    {
+        ScoreEasingCounter.Goal = Mode.Score;
+        ScoreEasingCounter.Update(gameTime);
+    }
+
     protected override void DrawScoring()
     {
         base.DrawScoring();
@@ -32,7 +42,7 @@ public class NormalRenderer : GamemodeRenderer
         var multInfo = "";
         var multStr = $"x{Mode.Combo:F2}";
         var scoreInfo = "Score";
-        var scoreStr = Mode.Score.ToString();
+        var scoreStr = $"{ScoreEasingCounter.Value:F0}";
 
         (var multPos, var multInfoPos) = FentrisHelper.GetScoringLayout(
             boardRect, 0.55f, 10, 10, multInfo, Game.MediumFont, multStr, Game.MediumFont

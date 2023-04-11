@@ -12,8 +12,9 @@ public class EasingCounter
         get => _goal;
         set
         {
-            if (value == _goal)
+            if (value != _goal)
             {
+                Console.WriteLine("goal set true");
                 goalSet = true;
                 _goal = value;
             }
@@ -40,10 +41,12 @@ public class EasingCounter
         if (goalSet)
         {
             _prevGoalTime = gt.TotalGameTime;
+            goalSet = false;
         }
 
         var sinceSet = gt.TotalGameTime - _prevGoalTime;
         var x = sinceSet.TotalSeconds / TimeScale;
+        Console.WriteLine(x);
         // var x = Math.Clamp(sinceSet.TotalSeconds / TimeScale, 0, 1);
 
         Value = LerpPrecise(Value, _goal, Easing(x));
