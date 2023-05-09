@@ -52,6 +52,8 @@ public class FentrisSaveData
     {
         return $"Highscores: {Highscores} is null {Highscores==null}, Keybinds: {Keybinds}, Mastery: {Mastery}";
     }
+
+    public bool FerocityUnlocked => Highscores.Normal.Score > 1200000 && Highscores.Apocalypse.Level > 333;
 }
 
 public class FentrisHighscores
