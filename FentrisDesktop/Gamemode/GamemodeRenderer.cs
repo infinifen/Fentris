@@ -152,6 +152,14 @@ public class GamemodeRenderer : GameScreen
             DrawActivePiece();
         }
 
+        if (Mode.State is GamemodeState.Are or GamemodeState.LineClear && Mode.SinceLastStateChange == 1)
+        {
+            foreach ( var (bx, by) in Mode.ActivePiece.GetBlockOffsets())
+            {
+                LockFlashFill(Mode.ActivePiece.X + bx, Mode.ActivePiece.Y + by);
+            }
+        }
+
         DrawNextQueue();
 
         DrawBorder();
@@ -194,6 +202,14 @@ public class GamemodeRenderer : GameScreen
         // y - 1 is there because of the vanish row, the first actual row that should be visible is row y=1
         DrawBlock(kind, x * 64 + Layout.BoardBorderThickness, (y - 1) * 64 + Layout.BoardStartY, 64, blackness,
             opacity);
+    }
+
+    protected virtual void LockFlashFill(int x, int y)
+    {
+        var screenX = x * 64 + Layout.BoardBorderThickness;
+        var screenY = (y - 1) * 64 + Layout.BoardStartY;
+        var size = 64;
+        SpriteBatch.FillRectangle(new Vector2(screenX, screenY), new Size2(size, size), Color.White);
     }
 
     protected virtual void DrawBlock(BlockKind kind, int screenX, int screenY, int size, float blackness = 0, float opacity = 1)
