@@ -44,6 +44,24 @@
 /processorParam:DebugMode=Auto
 /build:MainMenuBg.fx
 
+#begin sfx/drop.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/drop.wav
+
+#begin sfx/move.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/move.wav
+
+#begin sfx/unlock.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/unlock.wav
+
 #begin tpiece_4k.png
 /importer:TextureImporter
 /processor:TextureProcessor
