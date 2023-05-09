@@ -143,6 +143,7 @@ public class Gamemode
         }
 
         ActivePiece.X += direction;
+        Sfx.PlaySound(SoundEffects.Move);
         return true;
     }
 
@@ -339,6 +340,7 @@ public class Gamemode
         Board.PlacePiece(ActivePiece, FrameCount);
         PiecesPlaced++;
         OnPieceLock();
+        Sfx.PlaySound(SoundEffects.Drop);
         var full = Board.FullRows().ToList();
         if (full.Any())
         {
