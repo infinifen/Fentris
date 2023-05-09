@@ -1,6 +1,6 @@
 namespace FentrisDesktop.Sound;
 
-public enum SoundEffect
+public enum SoundEffects
 {
     Move,
     Drop,
