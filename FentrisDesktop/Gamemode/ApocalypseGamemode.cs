@@ -58,6 +58,8 @@ public class ApocalypseGamemode : Gamemode
 
     public override void SaveRecord(FentrisHighscores highscores)
     {
+        var ferocity = highscores.FerocityUnlocked;
+        
         if (Level > highscores.Apocalypse.Level)
         {
             highscores.Apocalypse = new Result
@@ -66,6 +68,11 @@ public class ApocalypseGamemode : Gamemode
                 Level = Level,
                 Lines = LinesCleared
             };
+        }
+        
+        if (!ferocity && highscores.FerocityUnlocked)
+        {
+            Sfx.PlaySound(SoundEffects.Unlock);
         }
     }
 

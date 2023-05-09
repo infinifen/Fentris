@@ -61,7 +61,7 @@ public class FentrisHighscores
     public ApocalypseGamemode.Result Apocalypse { get; set; }
     public FerocityGamemode.Result Ferocity { get; set; }
     
-    public bool FerocityUnlocked => Normal.Score > 1200000 && Apocalypse.Level > 333;
+    public bool FerocityUnlocked => Normal.Score > 1200000 && Apocalypse.Level > 100;
 
 
     public override string ToString()

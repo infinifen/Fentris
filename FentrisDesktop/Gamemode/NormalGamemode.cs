@@ -78,6 +78,8 @@ public class NormalGamemode : Gamemode
     
     public override void SaveRecord(FentrisHighscores highscores)
     {
+        var ferocity = highscores.FerocityUnlocked;
+        
         if (Score > highscores.Normal.Score)
         {
             highscores.Normal = new Result
@@ -87,6 +89,11 @@ public class NormalGamemode : Gamemode
                 Lines = LinesCleared,
                 Score = Score
             };
+        }
+
+        if (!ferocity && highscores.FerocityUnlocked)
+        {
+            Sfx.PlaySound(SoundEffects.Unlock);
         }
     }
     
