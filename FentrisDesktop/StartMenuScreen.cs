@@ -21,20 +21,20 @@ public class StartMenuScreen : GameScreen
     public static readonly MenuEntry[] Entries = new[]
     {
         new MenuEntry("Beginner Marathon", "Clear 100 lines as fast as you can!",
-            game => { game.LoadGamemode(new Gamemode.BeginnerMarathonGamemode()); },
+            game => { game.LoadGamemode(new Gamemode.BeginnerMarathonGamemode(game.SfxManager)); },
             new Color(0.1f, 0.8f, 0.2f, 1f)),
         
         new MenuEntry("Normal Score Attack", "Keep your multiplier high and score as high as possible in this 400-level mode!",
-            game => { game.LoadGamemode(new Gamemode.NormalGamemode()); },
+            game => { game.LoadGamemode(new Gamemode.NormalGamemode(game.SfxManager)); },
             new Color(0.5f, 0.4f, 0.73f, 1f)),
 
         new MenuEntry("Apocalypse", "Delay the descent into insanity.",
-            game => { game.LoadGamemode(new ApocalypseGamemode()); },
+            game => { game.LoadGamemode(new ApocalypseGamemode(game.SfxManager)); },
             new Color(0.82f, 0.23f, 0.1f, 1f)),
         
         new MenuEntry("Ferocity", "Say goodbye to the serene.",
             game => game.SaveData.Highscores.Apocalypse.Level > 333, 
-            game => { game.LoadGamemode(new FerocityGamemode()); },
+            game => { game.LoadGamemode(new FerocityGamemode(game.SfxManager)); },
             new Color(0.2f, 0.2f, 0.2f, 1f)),
         
         new MenuEntry("Key bindings", "You can change your controls here.", game =>
@@ -48,8 +48,8 @@ public class StartMenuScreen : GameScreen
     
     private readonly MenuEntry[] _unlockedEntries;
     private int _menuIdx = 0;
-    private MenuEntry CurrentMenuItem => _unlockedEntries[Mod(_menuIdx, Entries.Length)];
-    private int CurrentMenuIdx => Mod(_menuIdx, Entries.Length);
+    private MenuEntry CurrentMenuItem => _unlockedEntries[Mod(_menuIdx, _unlockedEntries.Length)];
+    private int CurrentMenuIdx => Mod(_menuIdx, _unlockedEntries.Length);
     private FentrisGame _game;
     private SpriteBatch _spriteBatch;
     private Texture2D _keysBackground;

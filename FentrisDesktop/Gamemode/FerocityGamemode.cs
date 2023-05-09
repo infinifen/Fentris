@@ -1,4 +1,5 @@
 ﻿using FentrisDesktop.Board;
+using FentrisDesktop.Sound;
 
 namespace FentrisDesktop.Gamemode;
 
@@ -116,5 +117,9 @@ public class FerocityGamemode : Gamemode
                 Lines = LinesCleared
             };
         }
+    }
+
+    public FerocityGamemode(ISoundEffectManager sfxManager) : base(sfxManager)
+    {
     }
 }

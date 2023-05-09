@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FentrisDesktop.Sound;
 
 namespace FentrisDesktop.Gamemode;
 
@@ -133,5 +134,9 @@ public class BeginnerMarathonGamemode : Gamemode
         public int Score { get; set; }
         public int Lines { get; set; }
         public int Frames { get; set; }
+    }
+
+    public BeginnerMarathonGamemode(ISoundEffectManager sfxManager) : base(sfxManager)
+    {
     }
 }

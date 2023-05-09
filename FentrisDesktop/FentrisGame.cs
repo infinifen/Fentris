@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using FentrisDesktop.Board;
 using FentrisDesktop.Config;
 using FentrisDesktop.Gamemode;
+using FentrisDesktop.Sound;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Content;
@@ -23,6 +26,8 @@ public class FentrisGame : Game
     public DynamicSpriteFont LargeFont;
     public DynamicSpriteFont MediumFont;
     public DynamicSpriteFont SmallFont;
+    public readonly Dictionary<SoundEffects, SoundEffect> Sfx = new();
+    public ISoundEffectManager SfxManager;
 
     public KeyConfig KeyBinds
     {
@@ -54,6 +59,11 @@ public class FentrisGame : Game
         
         _screenManager = new ScreenManager();
         Components.Add(_screenManager);
+        
+        Sfx.Add(SoundEffects.Drop, Content.Load<SoundEffect>("sfx/drop"));
+        Sfx.Add(SoundEffects.Move, Content.Load<SoundEffect>("sfx/move"));
+        Sfx.Add(SoundEffects.Unlock, Content.Load<SoundEffect>("sfx/unlock"));
+        SfxManager = new DictSfxManager(Sfx);
 
         Window.ClientSizeChanged += (sender, args) =>
         {

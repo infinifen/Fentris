@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FentrisDesktop.Sound;
 
 namespace FentrisDesktop.Gamemode;
 
@@ -95,5 +96,9 @@ public class NormalGamemode : Gamemode
         public long Score { get; set; }
         public int Lines { get; set; }
         public int Frames { get; set; }
+    }
+
+    public NormalGamemode(ISoundEffectManager sfxManager) : base(sfxManager)
+    {
     }
 }

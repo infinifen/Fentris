@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FentrisDesktop.Board;
+using FentrisDesktop.Sound;
 
 namespace FentrisDesktop.Gamemode;
 
@@ -38,6 +39,7 @@ public class Gamemode
     public int ArrCharge = 0;
 
     protected GamemodeState _state = GamemodeState.ReadyGo;
+    protected ISoundEffectManager Sfx;
 
     public GamemodeState State
     {
@@ -60,8 +62,13 @@ public class Gamemode
     public List<int> CurrentFullRows = new();
     // rotation system goes here later
 
-    public Gamemode()
+    public Gamemode() : this(new DummySfxManager())
     {
+    }
+
+    public Gamemode(ISoundEffectManager sfxManager)
+    {
+        Sfx = sfxManager;
         NextAmount = 2; // to be specified by each subclass ig
         Board = new Board.Board();
         Randomizer = new History6RollRandomizer();

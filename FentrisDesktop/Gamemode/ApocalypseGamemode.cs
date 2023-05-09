@@ -1,4 +1,5 @@
 ﻿using System;
+using FentrisDesktop.Sound;
 
 namespace FentrisDesktop.Gamemode;
 
@@ -73,5 +74,9 @@ public class ApocalypseGamemode : Gamemode
         public int Level { get; set; }
         public int Frames { get; set; }
         public int Lines { get; set; }
+    }
+
+    public ApocalypseGamemode(ISoundEffectManager sfxManager) : base(sfxManager)
+    {
     }
 }
