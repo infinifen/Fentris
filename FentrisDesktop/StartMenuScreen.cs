@@ -33,7 +33,7 @@ public class StartMenuScreen : GameScreen
             new Color(0.82f, 0.23f, 0.1f, 1f)),
         
         new MenuEntry("Ferocity", "Say goodbye to the serene.",
-            game => game.SaveData.Highscores.Apocalypse.Level > 200, 
+            game => game.SaveData.Highscores.Apocalypse.Level > 333, 
             game => { game.LoadGamemode(new FerocityGamemode()); },
             new Color(0.2f, 0.2f, 0.2f, 1f)),
         
