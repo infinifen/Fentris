@@ -44,7 +44,7 @@ public class BeginnerMarathonGamemode : Gamemode
             IsInRoll = true;
         }
 
-        if (IsInRoll)
+        if (IsInRoll && !State.IsFinished())
         {
             RollFramesRemaining--;
         }
