@@ -23,6 +23,10 @@ public class ApocalypseRenderer : GamemodeRenderer
         base.Draw(gameTime);
     }
 
+    public override Vector4 Tint1 => new Vector4(0.4f, 0.2f, 0.2f, 1f);
+    public override Vector4 Tint2 => new Vector4(0.9f, 0.04f, 0.1f, 1f);
+    public override float DistScale => 12 + (float)(Mode.SpeedLv / 200f);
+
     protected override void DrawScoring()
     {
         base.DrawScoring();

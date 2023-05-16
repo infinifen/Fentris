@@ -21,6 +21,9 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
         SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
             BoardRenderTarget.Height - Layout.BoardStartY, borderColor, Layout.BoardBorderThickness);
     }
+    
+    public override Vector4 Tint1 => new Vector4(0.1f, 0.84f, 0.1f, 1f);
+    public override Vector4 Tint2 => new Vector4(0.1f, 0.64f, 0.2f, 1f);
 
     public override void Draw(GameTime gameTime)
     {

@@ -21,6 +21,9 @@ public class NormalRenderer : GamemodeRenderer
         SpriteBatch.DrawRectangle(0, Layout.BoardStartY, BoardRenderTarget.Width,
             BoardRenderTarget.Height - Layout.BoardStartY, Color.White, Layout.BoardBorderThickness);
     }
+    
+    public override Vector4 Tint1 => new Vector4(1f, 1f, 1f, 1f);
+    public override Vector4 Tint2 => new Vector4(1f-(float)Math.Clamp(Mode.Combo / 100.0, 0, 1), 1f-(float)Math.Clamp(Mode.Combo / 100.0, 0, 1), 1f, 1f);
 
     public override void Draw(GameTime gameTime)
     {

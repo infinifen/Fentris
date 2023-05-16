@@ -119,7 +119,7 @@ public class GamemodeRenderer : GameScreen
     public virtual Vector4 Tint1 => new Vector4(0.6f, 0.0f, 0.8f, 1f);
     public virtual Vector4 Tint2 => new Vector4(0.8f, 0.0f, 0.6f, 1f);
     public virtual float TimeScale => 1.2f;
-    public virtual float DistScale => 4f;
+    public virtual float DistScale => 6f;
 
     private (Vector2, float) ComputeBackgroundScale(Texture2D tex)
     {
