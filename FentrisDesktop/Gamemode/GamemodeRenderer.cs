@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Content;
 using MonoGame.Extended.Screens;
 
 namespace FentrisDesktop.Gamemode;
@@ -19,7 +20,10 @@ public class GamemodeRenderer : GameScreen
     protected InputHandler InputHandler;
     protected DynamicSpriteFont DebugFont => Game.SmallFont;
     protected Texture2D BlockTexture;
+    protected Effect SkyShader;
+    protected Texture2D SkyTexture;
     protected LayoutInfo Layout = new();
+
 
     public GamemodeRenderer(FentrisGame game, FentrisDesktop.Gamemode.Gamemode mode) : base(game)
     {
@@ -36,6 +40,8 @@ public class GamemodeRenderer : GameScreen
         Console.WriteLine("loadContent");
         SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
         BlockTexture = Content.Load<Texture2D>("block");
+        SkyShader = Content.Load<Effect>("SkyBg");
+        SkyTexture = Content.Load<Texture2D>("sky-dark-4k");
     }
 
     public override void Update(GameTime gameTime)
@@ -72,6 +78,11 @@ public class GamemodeRenderer : GameScreen
     public override void Draw(GameTime gameTime)
     {
         DrawBoard();
+        DrawBackground(gameTime);
+        // draw board to screen
+        SpriteBatch.Begin();
+        SpriteBatch.Draw(BoardRenderTarget, CalculateBoardRect(), Color.White);
+        SpriteBatch.End();
         DrawScoring();
 
         SpriteBatch.Begin();
@@ -88,6 +99,41 @@ public class GamemodeRenderer : GameScreen
         }
         
         SpriteBatch.End();
+    }
+
+    protected void DrawBackground(GameTime gameTime)
+    {
+        SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+        SkyShader.Parameters["tint1"].SetValue(Tint1);
+        SkyShader.Parameters["tint2"].SetValue(Tint2);
+        SkyShader.Parameters["distScale"].SetValue(DistScale);
+        SkyShader.Parameters["timeScale"].SetValue(TimeScale);
+        SkyShader.Parameters["time"].SetValue((float) gameTime.TotalGameTime.TotalSeconds);
+        SkyShader.Techniques["SpriteDrawing"].Passes[0].Apply();
+        var (bgPos, bgScale) = ComputeBackgroundScale(SkyTexture);
+        SpriteBatch.Draw(SkyTexture, bgPos, scale: bgScale, sourceRectangle: null, color: Color.White,
+            origin: Vector2.Zero, effects: SpriteEffects.None, rotation: 0f, layerDepth: 0f);
+        SpriteBatch.End();
+    }
+
+    public virtual Vector4 Tint1 => new Vector4(0.6f, 0.0f, 0.8f, 1f);
+    public virtual Vector4 Tint2 => new Vector4(0.8f, 0.0f, 0.6f, 1f);
+    public virtual float TimeScale => 1.2f;
+    public virtual float DistScale => 4f;
+
+    private (Vector2, float) ComputeBackgroundScale(Texture2D tex)
+    {
+        var xB = tex.Width;
+        var yB = tex.Height;
+
+        var xR = Game.W / (float)xB;
+        var yR = Game.H / (float)yB;
+        var scale = Math.Max(xR, yR);
+
+        var excessX = xB * scale - Game.W;
+        var excessY = yB * scale - Game.H;
+
+        return (new Vector2(-excessX / 2, -excessY / 2), scale);
     }
 
     protected virtual void DrawActivePiece()
@@ -116,9 +162,8 @@ public class GamemodeRenderer : GameScreen
     
     protected virtual void DrawBoard()
     {
-        var rect = CalculateBoardRect();
         Game.GraphicsDevice.SetRenderTarget(BoardRenderTarget);
-        Game.GraphicsDevice.Clear(Color.Transparent);
+        Game.GraphicsDevice.Clear(Color.Black);
 
         SpriteBatch.Begin();
 
@@ -166,11 +211,6 @@ public class GamemodeRenderer : GameScreen
 
         SpriteBatch.End();
         Game.GraphicsDevice.SetRenderTarget(null);
-
-        // draw board to screen
-        SpriteBatch.Begin();
-        SpriteBatch.Draw(BoardRenderTarget, rect, Color.White);
-        SpriteBatch.End();
     }
 
     protected virtual void DrawBorder()

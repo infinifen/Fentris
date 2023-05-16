@@ -68,6 +68,12 @@
 /processorParam:DebugMode=Auto
 /build:MainMenuBg.fx
 
+#begin SkyBg.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Debug
+/build:SkyBg.fx
+
 #begin sfx/drop.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
