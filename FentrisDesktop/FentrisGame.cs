@@ -144,6 +144,11 @@ public class FentrisGame : Game
     {
         _screenManager.LoadScreen(new StartMenuScreen(this), new ExpandTransition(GraphicsDevice, Color.Gray, 0.2F));
     }
+
+    public void LoadHighscores()
+    {
+        _screenManager.LoadScreen(new RecordScreen(this), new ExpandTransition(GraphicsDevice, Color.Gray, 0.2F));
+    }
     
     private void ReloadFonts()
     {

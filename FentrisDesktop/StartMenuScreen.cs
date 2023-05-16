@@ -41,6 +41,11 @@ public class StartMenuScreen : GameScreen
         {
             game.LoadKeyConfig();
         }, Color.Azure),
+        
+        new MenuEntry("Highscores", "Ascend ever higher.", game =>
+        {
+            game.LoadHighscores();
+        }, Color.Silver),
 
         new MenuEntry("Exit", "See you next time.", game => { game.Exit(); },
             new Color(1f, 1f, 1f, 1f))
