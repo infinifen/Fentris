@@ -91,6 +91,7 @@ public class BeginnerMarathonGamemode : Gamemode
         Board.PlacePiece(ActivePiece, FrameCount);
         PiecesPlaced++;
         OnPieceLock();
+        Sfx.PlaySound(SoundEffects.Drop);
         var full = Board.FullRows().ToList();
         if (full.Any())
         {
