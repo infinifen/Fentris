@@ -38,8 +38,10 @@ public class BeginnerMarathonRenderer : GamemodeRenderer
     {
         SpriteBatch.Begin();
         var boardRect = CalculateBoardRect();
-        var lineCountInfo = "Lines";
-        var lineCountStr = Mode.LinesCleared.ToString();
+        var lineCountInfo = !Mode.IsInRoll ? "Lines" : "20G Challenge";
+        var rollTime = FentrisHelper.FramesToTime(Mode.RollFramesRemaining);
+        var lineCountStr = !Mode.IsInRoll ? Mode.LinesCleared.ToString() : $"{rollTime.s:D2}:{rollTime.cs:D2}";
+
         var scoreInfo = "Score";
         var scoreStr = $"{ScoreEasingCounter.Value:F0}";
 
