@@ -17,12 +17,12 @@ public static class FentrisHelper
     {
         return bk switch
         {
-            BlockKind.Blue => Microsoft.Xna.Framework.Color.Blue,
+            BlockKind.Blue => new Microsoft.Xna.Framework.Color(32, 32, 255, 255),
             BlockKind.Bone => Microsoft.Xna.Framework.Color.Gray,
             BlockKind.Clear => Microsoft.Xna.Framework.Color.Transparent,
             BlockKind.Cyan => Microsoft.Xna.Framework.Color.Cyan,
             BlockKind.Garbage => Microsoft.Xna.Framework.Color.DarkGray,
-            BlockKind.Green => Microsoft.Xna.Framework.Color.Green,
+            BlockKind.Green => new Microsoft.Xna.Framework.Color(32, 255, 32, 255),
             BlockKind.Magenta => Microsoft.Xna.Framework.Color.Magenta,
             BlockKind.Orange => Microsoft.Xna.Framework.Color.Orange,
             BlockKind.Red => Microsoft.Xna.Framework.Color.Red,
