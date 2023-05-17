@@ -97,6 +97,11 @@ public class StartMenuScreen : GameScreen
         {
             CurrentMenuItem.Action(_game);
         }
+
+        if (state.WasKeyJustUp(_game.KeyBinds.Back))
+        {
+            _game.Exit();
+        }
     }
 
     public override void Draw(GameTime gameTime)
