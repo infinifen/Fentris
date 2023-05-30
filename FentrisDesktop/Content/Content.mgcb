@@ -98,6 +98,12 @@
 /processorParam:Quality=Best
 /build:sfx/line.wav
 
+#begin sfx/clear.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/clear.wav
+
 #begin tpiece_4k.png
 /importer:TextureImporter
 /processor:TextureProcessor

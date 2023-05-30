@@ -6,4 +6,5 @@ public enum SoundEffects
     Drop,
     Unlock,
     LineClear,
+    Finish,
 }

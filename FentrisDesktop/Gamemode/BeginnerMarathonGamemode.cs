@@ -53,6 +53,7 @@ public class BeginnerMarathonGamemode : Gamemode
         {
             LockPiece();
             State = GamemodeState.Clear;
+            Sfx.PlaySound(SoundEffects.Finish);
         }
     }
     
