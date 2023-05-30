@@ -345,6 +345,7 @@ public class Gamemode
         if (full.Any())
         {
             State = GamemodeState.LineClear;
+            Sfx.PlaySound(SoundEffects.LineClear);
             CurrentFullRows = full;
             LinesCleared += CurrentFullRows.Count;
             OnLineClear(full);

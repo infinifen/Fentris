@@ -92,6 +92,12 @@
 /processorParam:Quality=Best
 /build:sfx/unlock.wav
 
+#begin sfx/line.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/line.wav
+
 #begin tpiece_4k.png
 /importer:TextureImporter
 /processor:TextureProcessor

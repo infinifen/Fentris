@@ -63,6 +63,7 @@ public class FentrisGame : Game
         Sfx.Add(SoundEffects.Drop, Content.Load<SoundEffect>("sfx/drop"));
         Sfx.Add(SoundEffects.Move, Content.Load<SoundEffect>("sfx/move"));
         Sfx.Add(SoundEffects.Unlock, Content.Load<SoundEffect>("sfx/unlock"));
+        Sfx.Add(SoundEffects.LineClear, Content.Load<SoundEffect>("sfx/line"));
         SfxManager = new DictSfxManager(Sfx);
 
         Window.ClientSizeChanged += (sender, args) =>

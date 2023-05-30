@@ -5,4 +5,5 @@ public enum SoundEffects
     Move,
     Drop,
     Unlock,
+    LineClear,
 }
