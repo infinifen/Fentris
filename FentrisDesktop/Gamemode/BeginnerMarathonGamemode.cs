@@ -52,8 +52,11 @@ public class BeginnerMarathonGamemode : Gamemode
         if (RollFramesRemaining == 0)
         {
             LockPiece();
+            if (State != GamemodeState.Clear)
+            {
+                Sfx.PlaySoundOnce(SoundEffects.Finish);
+            }
             State = GamemodeState.Clear;
-            Sfx.PlaySound(SoundEffects.Finish);
         }
     }
     

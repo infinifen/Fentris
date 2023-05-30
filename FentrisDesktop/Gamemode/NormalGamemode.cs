@@ -73,8 +73,11 @@ public class NormalGamemode : Gamemode
         if (Level >= 400 && State != GamemodeState.LineClear)
         {
             Level = 400;
+            if (State != GamemodeState.Clear)
+            {
+                Sfx.PlaySoundOnce(SoundEffects.Finish);
+            }
             State = GamemodeState.Clear;
-            Sfx.PlaySound(SoundEffects.Finish);
         }
     }
     

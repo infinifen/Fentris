@@ -77,8 +77,11 @@ public class FerocityGamemode : Gamemode
         if (Level >= 999 && State != GamemodeState.LineClear)
         {
             Level = 999;
+            if (State != GamemodeState.Clear)
+            {
+                Sfx.PlaySoundOnce(SoundEffects.Finish);
+            }
             State = GamemodeState.Clear;
-            Sfx.PlaySound(SoundEffects.Finish);
         }
     }
     
