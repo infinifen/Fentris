@@ -12,7 +12,8 @@ public class GamemodeRegistry
         { "base", (game, mode) => new GamemodeRenderer(game, mode) },
         { "normal", (game, mode) => new NormalRenderer(game, mode) },
         { "beginnerm", (game, mode) => new BeginnerMarathonRenderer(game, mode) },
-        { "apocalypse", (game, mode) => new ApocalypseRenderer(game, mode) }
+        { "apocalypse", (game, mode) => new ApocalypseRenderer(game, mode) },
+        { "graded" , (game, mode) => new GradedRenderer(game, mode)}
     };
 
     public static RegistryReturn GetRendererForId(string id)
