@@ -13,12 +13,12 @@ public class GradedGamemode : Gamemode
     public double Sni = 1;
     public readonly double SniPowerWeight = 0.8;
 
-    public double NeatnessGrades;
-    public double AuxiliaryGrades;
-    public double SpeedGrades;
-    public double AuxGradeMultiplier = 1;
+    public decimal NeatnessGrades;
+    public decimal AuxiliaryGrades;
+    public decimal SpeedGrades;
+    public decimal AuxGradeMultiplier = 1;
 
-    public double Grade => NeatnessGrades + AuxiliaryGrades + SpeedGrades;
+    public decimal Grade => NeatnessGrades + AuxiliaryGrades + SpeedGrades;
     public int GradeInt => (int)Math.Floor(Grade);
     public int Section => Level / 100;
 
@@ -119,7 +119,7 @@ public class GradedGamemode : Gamemode
     {
         if (Sni > SniRequirement)
         {
-            NeatnessGrades += 0.01 * levelsProgressed;
+            NeatnessGrades += 0.01m * levelsProgressed;
         }
     }
 
@@ -139,12 +139,27 @@ public class GradedGamemode : Gamemode
         
         LineClears.Add(full.Count);
         RecalculateSni();
+        AddAuxiliaryGrades(full);
         
         Console.WriteLine($"sni = {Sni}");
         
         ProcessSniGrading(levelIncrement);
 
         Level += levelIncrement;
+    }
+
+    private void AddAuxiliaryGrades(List<int> full)
+    {
+        var baseScore = full.Count switch
+        {
+            1 => 0.001m,
+            2 => 0.007m,
+            3 => 0.02m,
+            4 => 0.03m,
+            _ => 0m,
+        };
+
+        AuxiliaryGrades += baseScore * (Section + 1) * AuxGradeMultiplier;
     }
 
     private void RecalculateSni()
