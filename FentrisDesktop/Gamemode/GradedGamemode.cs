@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FentrisDesktop.Sound;
 
 namespace FentrisDesktop.Gamemode;
@@ -7,10 +8,10 @@ namespace FentrisDesktop.Gamemode;
 public class GradedGamemode : Gamemode
 {
     public override string Id => "graded";
-
-    public int SniNumerator = 100;
-    public int SniDenominator = 100;
-    public double Sni => (double)SniNumerator / SniDenominator;
+    
+    public List<int> LineClears = new(500);
+    public double Sni = 1;
+    public readonly double SniPowerWeight = 0.8;
 
     public double NeatnessGrades;
     public double AuxiliaryGrades;
@@ -101,6 +102,7 @@ public class GradedGamemode : Gamemode
     public GradedGamemode(ISoundEffectManager gameSfxManager) : base(gameSfxManager)
     {
         // Level = 1090;
+        LineClears.AddRange(Enumerable.Repeat(4, 15));
     }
 
     protected override void OnPieceLock()
@@ -134,13 +136,31 @@ public class GradedGamemode : Gamemode
             4 => 5,
             _ => 5
         };
-
-        SniNumerator += full.Count - 1;
-        SniDenominator += 3;
+        
+        LineClears.Add(full.Count);
+        RecalculateSni();
+        
         Console.WriteLine($"sni = {Sni}");
         
         ProcessSniGrading(levelIncrement);
 
         Level += levelIncrement;
+    }
+
+    private void RecalculateSni()
+    {
+        var (num, den) = LineClears
+            .Select((clear, idx) => (clear, LineClears.Count - idx - 1))
+            .Select(tuple =>
+            {
+                var (clear, power) = tuple;
+                var num = (clear - 1) * clear;
+                var den = clear * 3;
+                var weight = Math.Pow(SniPowerWeight, power);
+                return (num * weight, den * weight);
+            })
+            .Aggregate((0d, 0d), (acc, val) => (acc.Item1 + val.Item1, acc.Item2 + val.Item2));
+
+        Sni = num / den;
     }
 }
