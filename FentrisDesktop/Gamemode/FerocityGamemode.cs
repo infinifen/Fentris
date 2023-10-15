@@ -68,7 +68,7 @@ public class FerocityGamemode : Gamemode
     protected override void OnStart()
     {
         base.OnStart();
-        // Level = 690;
+        Level = 690;
     }
 
     public override void Frame(GamemodeInputs input)

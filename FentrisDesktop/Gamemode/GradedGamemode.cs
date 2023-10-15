@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FentrisDesktop.Sound;
+using static FentrisDesktop.FentrisHelper;
 
 namespace FentrisDesktop.Gamemode;
 
@@ -21,6 +22,8 @@ public class GradedGamemode : Gamemode
     public decimal Grade => NeatnessGrades + AuxiliaryGrades + SpeedGrades;
     public int GradeInt => (int)Math.Floor(Grade);
     public int Section => Level / 100;
+    public int[] SummaricSectionTimes = new int[12];
+    public int[] SectionTimes = new int[12];
 
     public override int Gravity => Level switch
     {
@@ -38,8 +41,8 @@ public class GradedGamemode : Gamemode
     public override int Arr => 1;
     public override int Das => Section switch
     {
-        >= 3 => 6,
-        2 => 7,
+        >= 4 => 6,
+        3 => 7,
         1 => 8,
         _ => 10,
     };
@@ -95,8 +98,19 @@ public class GradedGamemode : Gamemode
         9 => 0.82,
         10 => 0.86,
         11 => 0.9,
-        12 => 1,
+        12 => 1.591, // no sni grades in credits
         _ => throw new ArgumentOutOfRangeException()
+    };
+
+    public (int, int) SpeedRequirements => Section switch
+    {
+        0 => (TimeToFrames(1, 20, 00), TimeToFrames(0, 50, 00)),
+        1 => (TimeToFrames(1, 00, 00), TimeToFrames(0, 45, 00)),
+        2 => (TimeToFrames(0, 55, 00), TimeToFrames(0, 42, 00)),
+        3 => (TimeToFrames(0, 50, 00), TimeToFrames(0, 38, 00)),
+        4 => (TimeToFrames(0, 50, 00), TimeToFrames(0, 36, 00)),
+        5 => (TimeToFrames(0, 50, 00), TimeToFrames(0, 34, 00)),
+        _ => (2, 1)
     };
     
     public GradedGamemode(ISoundEffectManager gameSfxManager) : base(gameSfxManager)
@@ -127,6 +141,7 @@ public class GradedGamemode : Gamemode
     protected override void OnLineClear(List<int> full)
     {
         // sni grades are processed using new sni, but old level
+        var oldLevel = Level;
         
         var levelIncrement = CurrentFullRows.Count switch
         {
@@ -146,6 +161,23 @@ public class GradedGamemode : Gamemode
         ProcessSniGrading(levelIncrement);
 
         Level += levelIncrement;
+        if (Level / 100 > oldLevel / 100)
+        {
+            OnSectionTransition();
+        }
+    }
+
+    protected virtual void OnSectionTransition()
+    {
+        var completedSection = Section - 1;
+        SummaricSectionTimes[completedSection] = FrameCount;
+        SectionTimes[completedSection] =
+            completedSection == 0 ? FrameCount : FrameCount - SummaricSectionTimes[completedSection - 1];
+
+        var (speedRequirementSlow, speedRequirementFast) = SpeedRequirements;
+        var clamped = Math.Clamp(SectionTimes[completedSection], speedRequirementFast, speedRequirementSlow);
+        var speedGradeIncrement = (speedRequirementSlow - clamped) / new decimal(speedRequirementSlow - speedRequirementFast);
+        SpeedGrades += decimal.Round(speedGradeIncrement, 3, MidpointRounding.ToZero);
     }
 
     private void AddAuxiliaryGrades(List<int> full)
@@ -178,4 +210,18 @@ public class GradedGamemode : Gamemode
 
         Sni = num / den;
     }
-}
+    
+    public override void Frame(GamemodeInputs input)
+    {
+        base.Frame(input);
+        if (Level >= 1200 && State != GamemodeState.LineClear)
+        {
+            Level = 1200;
+            if (State != GamemodeState.Clear)
+            {
+                Sfx.PlaySoundOnce(SoundEffects.Finish);
+            }
+            State = GamemodeState.Clear;
+        }
+    }
+} 

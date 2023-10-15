@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 
@@ -35,6 +37,11 @@ public class GradedRenderer : GamemodeRenderer
 
         SpriteBatch.DrawString(Game.LargeFont, sni, sniPos, Color.White);
         SpriteBatch.DrawString(Game.MediumFont, sniInfo, sniInfoPos, Color.White);
+
+        var stimes = Mode.SectionTimes.Select(x => FentrisHelper.FormatTime(FentrisHelper.FramesToTime(x)));
+
+        var text = string.Join('\n', stimes) + $"\naux: {Mode.AuxiliaryGrades} spd: {Mode.SpeedGrades}";
+        SpriteBatch.DrawString(Game.SmallFont, text, Vector2.Zero, Color.White);
         SpriteBatch.End();
     }
 }

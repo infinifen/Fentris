@@ -58,6 +58,12 @@ public static class FentrisHelper
         (var seconds, var restFrames) = Math.DivRem(rest, 60);
         return (minutes, seconds, (int)Math.Round(restFrames / 60d * 100d));
     }
+
+    public static int TimeToFrames(int m, int s, int cs)
+    {
+        var csFrames = (int) (cs * 0.6);
+        return m * 60 * 60 + s * 60 + csFrames;
+    }
     
     public static string FormatTime((int m, int s, int cs) timeInfo)
     {

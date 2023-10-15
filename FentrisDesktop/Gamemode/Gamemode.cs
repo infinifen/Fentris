@@ -171,8 +171,8 @@ public class Gamemode
 
     public virtual void Rotate(int direction, bool kick = true)
     {
-        var kicksCw = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, 2), (-1, 2) };
-        var kicksCcw = new List<(int, int)> { (0, 0), (-1, 0), (1, 0), (-1, 1), (1, 1), (-1, 2), (1, 2) };
+        var kicksCw = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (0, 1), (1, 1), (-1, 1), (1, 2), (-1, 2) };
+        var kicksCcw = new List<(int, int)> { (0, 0), (-1, 0), (1, 0), (0, 1), (-1, 1), (1, 1), (-1, 2), (1, 2) };
         var kicksICw = new List<(int, int)> { (0, 0), (1, 0), (-1, 0), (0, 1) };
         var kicksICcw = new List<(int, int)> { (0, 0), (-1, 0), (1, 0), (0, 1) };
 
