@@ -32,6 +32,10 @@ public class StartMenuScreen : GameScreen
             game => { game.LoadGamemode(new ApocalypseGamemode(game.SfxManager)); },
             new Color(0.82f, 0.23f, 0.1f, 1f)),
         
+        new MenuEntry("Graded", "grade system test",
+            game => { game.LoadGamemode(new GradedGamemode(game.SfxManager)); },
+            new Color(0.82f, 0.23f, 0.1f, 0f)),
+        
         new MenuEntry("Ferocity", "Say goodbye to the serene.",
             game => game.SaveData.Highscores.FerocityUnlocked, 
             game => { game.LoadGamemode(new FerocityGamemode(game.SfxManager)); },
